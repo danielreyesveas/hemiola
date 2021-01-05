@@ -3,6 +3,7 @@ from django.db import models
 from django.conf import settings
 from django.shortcuts import reverse
 from django_countries.fields import CountryField
+from taggit.managers import TaggableManager
 
 LABEL_CHOICES = (
     ('P', 'primary'),
@@ -38,18 +39,29 @@ class Category(models.Model):
     class Meta:
         verbose_name_plural = 'Categories'
 
+class Brand(models.Model):
+    name = models.CharField(max_length=100)
+    slug = models.SlugField()
+    description = models.CharField(max_length=1000, blank=True, null=True)
+    active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.name
 
 class Item(models.Model):
     title = models.CharField(max_length=100)
     subtitle = models.CharField(max_length=100)
     price = models.FloatField()
     discount_price = models.FloatField(blank=True, null=True)
-    category = models.ForeignKey(
-        'Category', on_delete=models.SET_NULL, blank=True, null=True)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, blank=True, null=True, related_name='items')
+    brand = models.ForeignKey(Brand, on_delete=models.SET_NULL, blank=True, null=True, related_name='items')
     label = models.CharField(choices=LABEL_CHOICES, max_length=1, default='P')
     slug = models.SlugField(default='test-product')
     description = models.TextField(default="Description")
     image = models.ImageField(default="default.jpg")
+    tags = TaggableManager(blank=True)
+    active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.title
@@ -68,6 +80,16 @@ class Item(models.Model):
         return reverse("core:remove-from-cart", kwargs={
             'slug': self.slug
         })
+
+    def related_items(self):
+        tags_ids = list(self.tags.values_list('pk', flat=True))
+        items = Item.objects.filter(tags__pk__in=(tags_ids)).exclude(pk=self.pk).order_by('-created_at').distinct()[:4]        
+        if items.count() < 4:
+            limit = (4 - items.count())
+            extra = self.category.items.exclude(pk=self.pk).order_by('-created_at')[:limit]
+            items = items | extra
+
+        return items
 
 
 class OrderItem(models.Model):

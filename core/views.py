@@ -24,7 +24,6 @@ class HomeView(ListView):
     template_name = 'home.html'
 
     def get_context_data(self, *args, **kwargs):
-        print(*args)
         context = super(HomeView, self).get_context_data(**kwargs)
         context['categories'] = Category.objects.filter(
             active=True).order_by('name')
@@ -33,7 +32,7 @@ class HomeView(ListView):
         context['slug'] = self.request.GET.get('slug', None)
 
         paginate_by = 8
-        print(self.request.GET.get('slug', None))
+
         return context
 
     def get_queryset(self):
@@ -42,6 +41,47 @@ class HomeView(ListView):
             return Item.objects.filter(category__slug=category_slug).order_by("title")
         return Item.objects.order_by("title")
 
+class ShopView(ListView):
+    template_name = 'shop.html'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(ShopView, self).get_context_data(**kwargs)
+        context['categories'] = Category.objects.filter(
+            active=True).order_by('name')
+        context['carrousel'] = Carrousel.objects.filter(
+            active=True).order_by('order')
+        context['slug'] = self.request.GET.get('slug', None)
+
+        paginate_by = 8
+
+        return context
+
+    def get_queryset(self):
+        category_slug = self.request.GET.get('slug', None)
+        if category_slug:
+            return Item.objects.filter(category__slug=category_slug).order_by("title")
+        return Item.objects.order_by("title")
+
+class BlogView(ListView):
+    template_name = 'blog.html'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(BlogView, self).get_context_data(**kwargs)
+        context['categories'] = Category.objects.filter(
+            active=True).order_by('name')
+        context['carrousel'] = Carrousel.objects.filter(
+            active=True).order_by('order')
+        context['slug'] = self.request.GET.get('slug', None)
+
+        paginate_by = 8
+
+        return context
+
+    def get_queryset(self):
+        category_slug = self.request.GET.get('slug', None)
+        if category_slug:
+            return Item.objects.filter(category__slug=category_slug).order_by("title")
+        return Item.objects.order_by("title")
 
 class PaymentView(View):
     def get(self, *args, **kwargs):
@@ -150,7 +190,6 @@ class PaymentView(View):
 
             except stripe.error.InvalidRequestError as e:
                 # Invalid parameters were supplied to Stripe's API
-                print(e)
                 messages.warning(self.request, "Invalid parameters")
                 return redirect("/")
 
@@ -561,3 +600,11 @@ class RequestRefundView(View):
             except ObjectDoesNotExist:
                 messages.info(self.request, "This order does not exist.")
                 return redirect("core:request-refund")
+
+def contact(request):
+    template_name = 'contact.html'
+    return render(request, template_name)
+
+def about(request):
+    template_name = 'about.html'
+    return render(request, template_name)

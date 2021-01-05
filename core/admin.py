@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Item, OrderItem, Order, Payment, Coupon, Carrousel, Category, Refund, Address, UserProfile
+from .models import Item, Brand, OrderItem, Order, Payment, Coupon, Carrousel, Category, Refund, Address, UserProfile
 
 
 def make_refund_accepted(modeladmin, request, queryset):
@@ -29,13 +29,22 @@ class AddressAdmin(admin.ModelAdmin):
 
 
 class ItemAdmin(admin.ModelAdmin):
-    list_display = ['title', 'price', 'category', 'slug']
-    list_filter = ['category']
-    list_display_links = ['title', 'category']
+    list_display = ['title', 'price', 'category', 'brand', 'tag_list', 'slug']
+    list_filter = ['category', 'brand']
+    list_display_links = ['title', 'category', 'brand']
     search_fields = ['title', 'subtitle', 'slug']
-
+    
+    def get_queryset(self, request):
+        return super().get_queryset(request).prefetch_related('tags')
+    
+    def tag_list(self, obj):
+        return ", ".join(o.name for o in obj.tags.all())
 
 class CategoryAdmin(admin.ModelAdmin):
+    list_display = ['name', 'slug', 'active']
+    search_fields = ['name']
+
+class BrandAdmin(admin.ModelAdmin):
     list_display = ['name', 'slug', 'active']
     search_fields = ['name']
 
@@ -47,6 +56,7 @@ admin.site.register(Payment)
 admin.site.register(Coupon)
 admin.site.register(Carrousel)
 admin.site.register(Category, CategoryAdmin)
+admin.site.register(Brand, BrandAdmin)
 admin.site.register(Refund)
 admin.site.register(Address, AddressAdmin)
 admin.site.register(UserProfile)

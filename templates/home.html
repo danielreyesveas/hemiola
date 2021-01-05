@@ -1,12 +1,12 @@
-{% extends "base.html" %}
+{% extends "base/base.html" %}
 
 {% load static %}
 
 {% block content %}
 
-{% include "hero.html" %}
+{% include "partials/hero.html" %}
 
-{% include "banner.html" %}
+{% include "partials/banner.html" %}
 
 <section class="product spad">
 	<div class="container">
@@ -20,19 +20,19 @@
 			</div>
 		</div>
 		<div class="row product__filter">
+			{% for item in item_list %}
 			<div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix new-arrivals">
 				<div class="product__item">
-					<div class="product__item__pic set-bg" data-setbg="{% static 'img/product/product-1.jpg' %}">
+					<div class="product__item__pic set-bg" data-setbg="{{ item.image.url }}">
 						<span class="label">New</span>
 						<ul class="product__hover">
 							<li><a href="#"><img src="{% static 'img/icon/heart.png' %}" alt=""></a></li>
-							<li><a href="#"><img src="{% static 'img/icon/compare.png' %}" alt=""> <span>Compare</span></a></li>
-							<li><a href="#"><img src="{% static 'img/icon/search.png' %}" alt=""></a></li>
+							<li><a href="{{ item.get_absolute_url }}"><img src="{% static 'img/icon/search.png' %}" alt=""></a></li>
 						</ul>
 					</div>
 					<div class="product__item__text">
-						<h6>Piqué Biker Jacket</h6>
-						<a href="#" class="add-cart">+ Add To Cart</a>
+						<h6>{{ item.title }}</h6>
+						<a href="{{ item.get_add_to_cart_url }}" class="add-cart">+ Add To Cart</a>
 						<div class="rating">
 							<i class="fa fa-star-o"></i>
 							<i class="fa fa-star-o"></i>
@@ -40,22 +40,18 @@
 							<i class="fa fa-star-o"></i>
 							<i class="fa fa-star-o"></i>
 						</div>
-						<h5>$67.24</h5>
-						<div class="product__color__select">
-							<label for="pc-1">
-								<input type="radio" id="pc-1">
-							</label>
-							<label class="active black" for="pc-2">
-								<input type="radio" id="pc-2">
-							</label>
-							<label class="grey" for="pc-3">
-								<input type="radio" id="pc-3">
-							</label>
-						</div>
+						<h5>$
+							{% if item.discount_price %}
+							{{ item.discount_price }}
+							{% else %}
+							{{ item.price }}
+							{% endif %}
+						</h5>
 					</div>
 				</div>
 			</div>
-			<div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix hot-sales">
+			{% endfor %}
+			<!-- <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix hot-sales">
 				<div class="product__item">
 					<div class="product__item__pic set-bg" data-setbg="{% static 'img/product/product-2.jpg' %}">
 						<ul class="product__hover">
@@ -294,15 +290,15 @@
 						</div>
 					</div>
 				</div>
-			</div>
+			</div> -->
 		</div>
 	</div>
 </section>
 
-{% include "countdown.html" %}
+{% include "partials/countdown.html" %}
 
-{% include "instagram.html" %}
+{% include "partials/instagram.html" %}
 
-{% include "blog.html" %}
+{% include "partials/blog.html" %}
 
 {% endblock content %}

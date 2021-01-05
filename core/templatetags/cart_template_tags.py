@@ -3,11 +3,12 @@ from core.models import Order
 
 register = template.Library()
 
-@register.filter
-def cart_item_count(user):
+@register.simple_tag
+def cart_item(user):
+    cart = { 'count': 0, 'total': 0 }
     if user.is_authenticated:
         qs = Order.objects.filter(user=user, ordered=False)
         if qs.exists():
-            return qs[0].items.count()
-    return 0
-    
+            cart['count'] = qs[0].items.count()             
+            cart['total'] = qs[0].get_total()             
+    return cart

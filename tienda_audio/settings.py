@@ -43,6 +43,10 @@ INSTALLED_APPS = [
 
     'crispy_forms',
 
+    'taggit',
+
+    'django_summernote',
+
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -73,6 +77,10 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+            ], 
+            'builtins': [
+                'core.templatetags.cart_template_tags',
+                'core.templatetags.shop_template_tags',
             ],
         },
     },
@@ -86,8 +94,12 @@ WSGI_APPLICATION = 'tienda_audio.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'tienda_audio',
+        'HOST': '107.6.142.229',
+        'USER': 'postgres',
+        'PASSWORD': 'daPV96G7N3b$',
+        'PORT': 5432
     }
 }
 
