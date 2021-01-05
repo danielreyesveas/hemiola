@@ -36,30 +36,39 @@ class HomeView(ListView):
         return context
 
     def get_queryset(self):
-        category_slug = self.request.GET.get('slug', None)
+        category_slug = self.request.GET.get('category', None)
+        brand_slug = self.request.GET.get('brand', None)
+        print(category_slug)
+        print(brand_slug)
         if category_slug:
             return Item.objects.filter(category__slug=category_slug).order_by("title")
         return Item.objects.order_by("title")
 
 class ShopView(ListView):
     template_name = 'shop.html'
+    paginate_by = 6
 
     def get_context_data(self, *args, **kwargs):
         context = super(ShopView, self).get_context_data(**kwargs)
-        context['categories'] = Category.objects.filter(
-            active=True).order_by('name')
-        context['carrousel'] = Carrousel.objects.filter(
-            active=True).order_by('order')
-        context['slug'] = self.request.GET.get('slug', None)
+        context['category_slug'] = self.request.GET.get('category', None)
+        context['brand_slug'] = self.request.GET.get('brand', None)
+        context['tag_slug'] = self.request.GET.get('tag', None)
 
         paginate_by = 8
 
         return context
 
+
     def get_queryset(self):
-        category_slug = self.request.GET.get('slug', None)
+        category_slug = self.request.GET.get('category', None)
+        brand_slug = self.request.GET.get('brand', None)
+        tag_slug = self.request.GET.get('tag', None)
         if category_slug:
             return Item.objects.filter(category__slug=category_slug).order_by("title")
+        elif brand_slug:
+            return Item.objects.filter(brand__slug=brand_slug).order_by("title")
+        elif tag_slug:
+            return Item.objects.filter(tags__name__in=[tag_slug]).order_by("title")
         return Item.objects.order_by("title")
 
 class BlogView(ListView):

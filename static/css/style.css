@@ -1264,6 +1264,12 @@ ol {
 	color: #111111;
 }
 
+.shop__sidebar__categories ul li.active a,
+.shop__sidebar__price ul li.active a,
+.shop__sidebar__brand ul li.active a {
+	color: #111111;
+}
+
 .shop__sidebar__brand ul {
 	height: auto;
 }
@@ -1387,6 +1393,11 @@ ol {
 }
 
 .shop__sidebar__tags a:hover {
+	background: #111111;
+	color: #ffffff;
+}
+
+.shop__sidebar__tags a.active {
 	background: #111111;
 	color: #ffffff;
 }

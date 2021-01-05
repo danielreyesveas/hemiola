@@ -1,0 +1,23 @@
+{% if is_paginated %}
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="product__pagination">
+                {% if page_obj.has_previous %}
+                    <a href="?{% url_replace request 'page' 1 %}">&lt;&lt;</a>
+                    <a href="?{% url_replace request 'page' page_obj.previous_page_number %}">&lt;</a>
+                {% endif %}
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                        <a class="active" href="?{% url_replace request 'page' num %}">{{ num }}</a>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3'  %}
+                        <a href="?{% url_replace request 'page' num %}">{{ num }}</a>
+                    {% endif %}
+                {% endfor %}
+                {% if page_obj.has_next %}
+                    <a href="?{% url_replace request 'page' page_obj.next_page_number %}">&gt;</a>
+                    <a href="?{% url_replace request 'page' page_obj.paginator.num_pages %}">&gt;&gt;</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endif %}

@@ -13,8 +13,9 @@
 		<div class="row">
 			<div class="col-lg-12">
 				<ul class="filter__controls">
+					<li class="active" data-filter="*">All</li>
 					{% for category in categories %}
-						<li class="{% if forloop.first %}active{% endif %}" data-filter=".{{category.slug}}">{{ category }}</li>
+						<li data-filter=".{{category.slug}}">{{ category }}</li>
 					{% endfor %}
 				</ul>
 			</div>

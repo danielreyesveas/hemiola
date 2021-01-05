@@ -47,7 +47,11 @@
                                         <div class="shop__sidebar__categories">
                                             <ul class="nice-scroll">           
                                                 {% for category in categories_filter %}
-                                                    <li><a href="#">{{ category.name }} ({{ category.items_count }})</a></li>
+                                                    <li class="{% ifequal category.slug category_slug %}active{% endifequal %}">
+                                                        <a href="{% url 'core:shop' %}?category={{ category.slug }}">
+                                                            {{ category.name }} ({{ category.items_count }})
+                                                        </a>
+                                                    </li>
                                                 {% endfor %}
                                             </ul>
                                         </div>
@@ -63,7 +67,11 @@
                                         <div class="shop__sidebar__brand">
                                             <ul>
                                                 {% for brand in brands_filter %}
-                                                    <li><a href="#">{{ brand.name }} ({{ brand.items_count }})</a></li>
+                                                    <li class="{% ifequal brand.slug brand_slug %}active{% endifequal %}">
+                                                        <a href="{% url 'core:shop' %}?brand={{ brand.slug }}">
+                                                            {{ brand.name }} ({{ brand.items_count }})
+                                                        </a>
+                                                    </li>
                                                 {% endfor %}
                                             </ul>
                                         </div>
@@ -97,7 +105,9 @@
                                     <div class="card-body">
                                         <div class="shop__sidebar__tags">
                                             {% for tag in tags_filter %}
-                                                <a href="#">{{ tag }}</a>
+                                                <a class="{% ifequal tag.slug tag_slug %}active{% endifequal %}" href="{% url 'core:shop' %}?tag={{ tag.slug }}">
+                                                    {{ tag.name }}
+                                                </a>
                                             {% endfor %}
                                         </div>
                                     </div>
@@ -161,17 +171,9 @@
                     </div>
                     {% endfor %}
                 </div>
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="product__pagination">
-                            <a class="active" href="#">1</a>
-                            <a href="#">2</a>
-                            <a href="#">3</a>
-                            <span>...</span>
-                            <a href="#">21</a>
-                        </div>
-                    </div>
-                </div>
+
+                {% include "partials/pagination.html" %}                
+
             </div>
         </div>
     </div>

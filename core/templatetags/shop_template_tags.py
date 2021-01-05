@@ -9,7 +9,7 @@ register = template.Library()
 def get_categories_total():
     qs = Category.objects.filter(active=True).annotate(
             items_count=(Count('items'))
-        ).order_by('name')
+        ).order_by('name').values('name', 'items_count', 'slug')
     if qs.exists():
         return qs
     return []
@@ -18,7 +18,7 @@ def get_categories_total():
 def get_brands_total():
     qs = Brand.objects.filter(active=True).annotate(
             items_count=(Count('items'))
-        ).order_by('name')
+        ).order_by('name').values('name', 'items_count', 'slug')
     if qs.exists():
         return qs
     return []
