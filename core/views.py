@@ -12,6 +12,7 @@ from .forms import CheckoutForm, CouponForm, RefundForm, PaymentForm
 import stripe
 import random
 import string
+from django.db.models import Max, Subquery, OuterRef, Count, F
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -21,28 +22,26 @@ def create_ref_code():
 
 
 class HomeView(ListView):
+    model = Item
     template_name = 'home.html'
+    object_list  = []
 
     def get_context_data(self, *args, **kwargs):
-        context = super(HomeView, self).get_context_data(**kwargs)
-        context['categories'] = Category.objects.filter(
-            active=True).order_by('name')
-        context['carrousel'] = Carrousel.objects.filter(
-            active=True).order_by('order')
-        context['slug'] = self.request.GET.get('slug', None)
-
-        paginate_by = 8
-
-        return context
-
+        return self.context
+    
     def get_queryset(self):
-        category_slug = self.request.GET.get('category', None)
-        brand_slug = self.request.GET.get('brand', None)
-        print(category_slug)
-        print(brand_slug)
-        if category_slug:
-            return Item.objects.filter(category__slug=category_slug).order_by("title")
-        return Item.objects.order_by("title")
+        self.context = super(HomeView, self).get_context_data()
+        queryset = super(HomeView, self).get_queryset()
+        queryset = queryset.order_by('-created_at')[:12]
+        self.context['object_list'] = queryset
+        cat_ids = list(queryset.values('category__name', 'category__slug'))
+        categories = []
+        for cat in cat_ids:
+            if cat not in categories:
+                categories.append(cat)
+        self.context['categories'] = categories
+
+        return queryset
 
 class ShopView(ListView):
     template_name = 'shop.html'

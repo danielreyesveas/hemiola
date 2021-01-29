@@ -15,21 +15,21 @@
 				<ul class="filter__controls">
 					<li class="active" data-filter="*">All</li>
 					{% for category in categories %}
-						<li data-filter=".{{category.slug}}">{{ category }}</li>
+						<li data-filter=".{{category.category__slug}}">{{ category.category__name }}</li>
 					{% endfor %}
 				</ul>
 			</div>
 		</div>
 		<div class="row product__filter">
-			{% for item in item_list %}
+			{% for item in object_list %}
 			<div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix {{ item.category.slug }}">
 				<div class="product__item">
-					<div class="product__item__pic set-bg" data-setbg="{{ item.image.url }}">
+					<div class="product__item__pic set-bg" data-href="{{ item.get_absolute_url }}" data-setbg="{{ item.image.url }}">
 						<span class="label">New</span>
-						<ul class="product__hover">
+						<!-- <ul class="product__hover">
 							<li><a href="#"><img src="{% static 'img/icon/heart.png' %}" alt=""></a></li>
 							<li><a href="{{ item.get_absolute_url }}"><img src="{% static 'img/icon/search.png' %}" alt=""></a></li>
-						</ul>
+						</ul> -->
 					</div>
 					<div class="product__item__text">
 						<h6>{{ item.title }}</h6>
@@ -298,7 +298,7 @@
 
 {% include "partials/countdown.html" %}
 
-{% include "partials/instagram.html" %}
+<!-- {% include "partials/instagram.html" %} -->
 
 {% include "partials/blog.html" %}
 

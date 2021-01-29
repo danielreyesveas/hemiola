@@ -81,6 +81,7 @@ TEMPLATES = [
             'builtins': [
                 'core.templatetags.cart_template_tags',
                 'core.templatetags.shop_template_tags',
+                'core.templatetags.custom_template_tags',
             ],
         },
     },

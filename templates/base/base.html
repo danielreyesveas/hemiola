@@ -78,6 +78,22 @@
     <script src="{% static 'js/owl.carousel.min.js' %}"></script>
     <script src="{% static 'js/main.js' %}"></script>
 
+    <script>
+
+        (function() {
+            const clickeables = document.getElementsByClassName("product__item__pic")
+    
+            Array.from(clickeables).forEach(function(element) {
+                element.addEventListener('click', event => {
+                    event.preventDefault()
+                    const url = element.dataset.href
+                    window.location.href = url
+                })
+            })
+        })()
+    
+    </script>
+
     {% block extra_scripts %}
     {% endblock extra_scripts %}
 
