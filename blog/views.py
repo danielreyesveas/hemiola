@@ -11,6 +11,17 @@ class BlogListView(ListView):
     model = Post
     template_name = 'blog/list.html'
 
+    def get_queryset(self):
+        category_pk = self.request.GET.get('category', None)
+        tag_slug = self.request.GET.get('tag', None)
+
+        if category_pk:
+            return Post.objects.filter(category__pk=category_pk).order_by("title")
+        elif tag_slug:
+            return Post.objects.filter(tags__name__in=[tag_slug]).order_by("title")
+            
+        return Post.objects.order_by("title")
+
 def blog_list(request):
     posts = Post.objects.all()
 
