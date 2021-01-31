@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, DetailView, View
 from .models import Item, OrderItem, Order, Address, Payment, Coupon, Carrousel, Category, Refund, UserProfile
+from blog.models import Post
 from django.shortcuts import redirect
 from django.utils import timezone
 from django.contrib import messages
@@ -27,7 +28,9 @@ class HomeView(ListView):
     object_list  = []
 
     def get_context_data(self, *args, **kwargs):
-        return self.context
+        context = super(HomeView, self).get_context_data(**kwargs)
+        context["posts"] = Post.objects.order_by('-created_at')[:3]
+        return context
     
     def get_queryset(self):
         self.context = super(HomeView, self).get_context_data()
