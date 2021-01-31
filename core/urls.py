@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import HomeView, ShopView, BlogView, CheckoutView, OrderSummaryView, ItemDetailView, about, contact, add_to_cart, add_single_item_to_cart, remove_from_cart, remove_single_item_from_cart, PaymentView, addCouponView, RequestRefundView
+from .views import HomeView, ShopView, CheckoutView, OrderSummaryView, ItemDetailView, about, contact, add_to_cart, add_single_item_to_cart, remove_from_cart, remove_single_item_from_cart, PaymentView, addCouponView, RequestRefundView
 
 app_name = 'core'
 
@@ -20,7 +20,6 @@ urlpatterns = [
      path('request-refund/', RequestRefundView.as_view(), name='request-refund'),
     
 
-     path('blog/', BlogView.as_view(), name='blog'),
      path('contact/', contact, name='contact'),
      path('about/', about, name='about'),
 ]

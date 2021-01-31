@@ -25,7 +25,7 @@
         </div> -->
     </div>
     <div class="offcanvas__nav__option">
-        <a href="#" class="search-switch"><img src="{% static 'img/icon/search.png' %}" alt=""></a>
+        <a href="" class="search-switch"><img src="{% static 'img/icon/search.png' %}" alt=""></a>
         <a href="#"><img src="{% static 'img/icon/heart.png' %}" alt=""></a>
         <a href="{% url 'core:order-summary' %}"><img src="{% static 'img/icon/cart.png' %}" alt=""> 
             {% if user.is_authenticated %}
@@ -88,7 +88,7 @@
                     <ul>
                         <li class="{% if request.path == '/' %}active{% endif %}"><a href="{% url 'core:home' %}">Home</a></li>
                         <li class="{% if request.path == '/shop/' %}active{% endif %}"><a href="{% url 'core:shop' %}">Shop</a></li>
-                        <li class="{% if request.path == '/blog/' %}active{% endif %}"><a href="{% url 'core:blog' %}">Blog</a></li>
+                        <li class="{% if request.path == '/blog/' %}active{% endif %}"><a href="{% url 'blog:blog' %}">Blog</a></li>
                         <li class="{% if request.path == '/contact/' %}active{% endif %}"><a href="{% url 'core:contact' %}">Contact</a></li>
                         <li class="{% if request.path == '/about/' %}active{% endif %}"><a href="{% url 'core:about' %}">About</a></li>
                     </ul>
@@ -96,7 +96,9 @@
             </div>
             <div class="col-lg-3 col-md-3">
                 <div class="header__nav__option">
-                    <a href="#" class="search-switch"><img src="{% static 'img/icon/search.png' %}" alt=""></a>
+                    <a href="#" class="search-switch">
+                        <img src="{% static 'img/icon/search.png' %}" alt="">
+                    </a>
                     <a href="#"><img src="{% static 'img/icon/heart.png' %}" alt=""></a>
                     <a href="{% url 'core:order-summary' %}"><img src="{% static 'img/icon/cart.png' %}" alt=""> 
                         {% if user.is_authenticated %}

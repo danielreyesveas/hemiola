@@ -716,7 +716,7 @@ ol {
 	margin-bottom: 10px;
 }
 
-.banner__item__text a {
+.banner__item__text .banner__item__a {
 	display: inline-block;
 	color: #111111;
 	font-size: 13px;
@@ -727,7 +727,7 @@ ol {
 	position: relative;
 }
 
-.banner__item__text a:after {
+.banner__item__text .banner__item__a:after {
 	position: absolute;
 	left: 0;
 	bottom: 0;
@@ -2835,7 +2835,7 @@ ol {
 	margin-bottom: 10px;
 }
 
-.blog__item__text a {
+.blog__item__text .blog__item__text__a {
 	display: inline-block;
 	color: #111111;
 	font-size: 13px;
@@ -2846,7 +2846,7 @@ ol {
 	position: relative;
 }
 
-.blog__item__text a:after {
+.blog__item__text .blog__item__text__a:after {
 	position: absolute;
 	left: 0;
 	bottom: 0;
@@ -3016,6 +3016,16 @@ ol {
   Blog Details
 -----------------------*/
 
+.blog__details__post__author__pic {
+	display: inline-block;
+}
+
+.blog__details__post__author__pic img {
+	height: 30px;
+	width: 30px;
+	border-radius: 50%;
+}
+
 .blog-details {
 	margin-top: -115px;
 	padding-top: 0;
@@ -3147,6 +3157,10 @@ ol {
 }
 
 .blog__details__author__text {
+	display: inline-block;
+}
+
+.blog__details__author__comment {
 	display: inline-block;
 }
 
@@ -3296,6 +3310,85 @@ ol {
 	letter-spacing: 4px;
 	padding: 14px 35px;
 }
+
+.blog__details__category a {
+	color: #404040;
+	font-size: 13px;
+	font-weight: 700;
+	background: #f1f5f8;
+	padding: 5px 18px;
+	display: inline-block;
+	text-transform: uppercase;
+	margin-right: 6px;
+	margin-bottom: 10px;
+	-webkit-transition: all, 0.3s;
+	-o-transition: all, 0.3s;
+	transition: all, 0.3s;
+}
+
+.blog__details__category a:hover {
+	background: #111111;
+	color: #ffffff;
+}
+
+.blog__details__category a.active {
+	background: #111111;
+	color: #ffffff;
+}
+
+.comment-list {
+	padding: 0;
+	margin: 0;
+  }
+  
+  .comment-list .children {
+	padding: 50px 0 0 40px;
+	margin: 0;
+	float: left;
+	width: 100%;
+  }
+  
+  .comment-list li {
+	padding: 0;
+	margin: 0 0 30px 0;
+	float: left;
+	width: 100%;
+	clear: both;
+	list-style: none;
+  }
+  
+  
+  .comment-list li .comment-body {
+	float: right;
+	width: calc(100% - 80px);
+  }
+  
+  .comment-list li .comment-body h3 {
+	font-size: 20px;
+  }
+  
+  .comment-list li .comment-body .meta {
+	text-transform: uppercase;
+	font-size: 13px;
+	letter-spacing: .1em;
+	color: #ccc;
+  }
+  
+  .comment-list li .comment-body .reply {
+	padding: 5px 10px;
+	background: #e6e6e6;
+	color: #333333;
+	text-transform: uppercase;
+	font-size: 11px;
+	letter-spacing: .1em;
+	font-weight: 400;
+	border-radius: 4px;
+  }
+  
+  .comment-list li .comment-body .reply:hover {
+	color: #fff;
+	background: black;
+  }
 
 /*---------------------
   Map

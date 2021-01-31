@@ -12,7 +12,7 @@ from .forms import CheckoutForm, CouponForm, RefundForm, PaymentForm
 import stripe
 import random
 import string
-from django.db.models import Max, Subquery, OuterRef, Count, F
+from django.db.models import  Q
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -49,16 +49,16 @@ class ShopView(ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(ShopView, self).get_context_data(**kwargs)
+        context['search'] = self.request.GET.get('search', None)
         context['category_slug'] = self.request.GET.get('category', None)
         context['brand_slug'] = self.request.GET.get('brand', None)
         context['tag_slug'] = self.request.GET.get('tag', None)
-
-        paginate_by = 8
 
         return context
 
 
     def get_queryset(self):
+        search = self.request.GET.get('search', None)
         category_slug = self.request.GET.get('category', None)
         brand_slug = self.request.GET.get('brand', None)
         tag_slug = self.request.GET.get('tag', None)
@@ -68,27 +68,13 @@ class ShopView(ListView):
             return Item.objects.filter(brand__slug=brand_slug).order_by("title")
         elif tag_slug:
             return Item.objects.filter(tags__name__in=[tag_slug]).order_by("title")
-        return Item.objects.order_by("title")
-
-class BlogView(ListView):
-    template_name = 'blog.html'
-
-    def get_context_data(self, *args, **kwargs):
-        context = super(BlogView, self).get_context_data(**kwargs)
-        context['categories'] = Category.objects.filter(
-            active=True).order_by('name')
-        context['carrousel'] = Carrousel.objects.filter(
-            active=True).order_by('order')
-        context['slug'] = self.request.GET.get('slug', None)
-
-        paginate_by = 8
-
-        return context
-
-    def get_queryset(self):
-        category_slug = self.request.GET.get('slug', None)
-        if category_slug:
-            return Item.objects.filter(category__slug=category_slug).order_by("title")
+        elif search:
+            return Item.objects.filter(
+                Q(title__icontains=search) | 
+                Q(category__name__icontains=search) | 
+                Q(brand__name__icontains=search) | 
+                Q(tags__name__icontains=search)
+            ).distinct().order_by("title")
         return Item.objects.order_by("title")
 
 class PaymentView(View):

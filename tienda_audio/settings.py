@@ -51,7 +51,9 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
 
-    'core'
+    'blog',
+    'core',
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -127,7 +129,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'es'
 
 TIME_ZONE = 'UTC'
 
@@ -149,6 +151,8 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 LOGIN_REDIRECT_URL = '/'
+ACCOUNT_LOGOUT_REDIRECT_URL  = '/'
+ACCOUNT_LOGOUT_ON_GET = True 
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
