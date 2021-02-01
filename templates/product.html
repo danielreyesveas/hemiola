@@ -93,10 +93,10 @@
 						
 						<h3>
 							{% if object.discount_price %}
-								${{ object.discount_price }} 
-								<span>{{ object.price }}</span>
+								{{ object.discount_price | currency }} 
+								<span>{{ object.price | currency }}</span>
 							{% else %}
-								${{ object.price }} 
+								{{ object.price | currency }} 
 							{% endif %}
 						</h3>
 
@@ -203,11 +203,11 @@
 								<i class="fa fa-star-o"></i>
 								<i class="fa fa-star-o"></i>
 							</div>
-							<h5>$
+							<h5>
 								{% if related_item.discount_price %}
-								{{ related_item.discount_price }}
+									{{ related_item.discount_price | currency }}
 								{% else %}
-								{{ related_item.price }}
+									{{ related_item.price | currency }}
 								{% endif %}
 							</h5>						
 						</div>

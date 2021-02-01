@@ -194,12 +194,11 @@
 										<i class="fa fa-star"></i>
 										<i class="fa fa-star-o"></i>
 									</div>
-									<h5>
-										$
+									<h5>										
 										{% if item.discount_price %} 
-											{{ item.discount_price }}
+											{{ item.discount_price | currency }}
 										{% else %} 
-											{{ item.price }} 
+											{{ item.price | currency }} 
 										{% endif %}
 									</h5>
 								</div>
