@@ -7,11 +7,11 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="breadcrumb__text">
-                    <h4>Shopping Cart</h4>
+                    <h4>Mi Carro</h4>
                     <div class="breadcrumb__links">
                         <a href="{% url 'core:home' %}">Home</a>
-                        <a href="{% url 'core:shop' %}">Shop</a>
-                        <span>Shopping Cart</span>
+                        <a href="{% url 'core:shop' %}">Tienda</a>
+                        <span>Mi Carro</span>
                     </div>
                 </div>
             </div>
@@ -27,8 +27,8 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>Product</th>
-                                <th>Quantity</th>
+                                <th>Producto</th>
+                                <th>Cantidad</th>
                                 <th>Total</th>
                                 <th></th>
                             </tr>
@@ -38,11 +38,11 @@
                             <tr>
                                 <td class="product__cart__item">
                                     <div class="product__cart__item__pic">
-                                        <img src="{{ order_item.item.image.url }}" alt="">
+                                        <img src="{{ order_item.item.image.url }}" width="90" alt="">
                                     </div>
                                     <div class="product__cart__item__text">
                                         <h6>{{ order_item.item.title }}</h6>
-                                        <h5>${{ order_item.item.price }}</h5>
+                                        <h5>{{ order_item.item.price | currency }}</h5>
                                     </div>
                                 </td>
                                 <td class="quantity__item">
@@ -60,7 +60,7 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td class="cart__price">${{ order_item.get_total_item_price }}</td>
+                                <td class="cart__price">{{ order_item.get_total_item_price | currency }}</td>
                                 <td class="cart__close">
                                     <a href="{% url 'core:remove-from-cart' order_item.item.slug %}">
                                         <i class="fa fa-close"></i>
@@ -69,7 +69,7 @@
                             </tr>
                             {% empty %}
                             <tr>
-                                <td colspan="4">Your Cart is empty</td>
+                                <td colspan="4">Tu carro está vacío</td>
                             </tr>
                             {% endfor %}                            
                         </tbody>
@@ -78,7 +78,7 @@
                 <div class="row">
                     <div class="col-lg-6 col-md-6 col-sm-6">
                         <div class="continue__btn">
-                            <a href="{% url 'core:shop' %}">Continue Shopping</a>
+                            <a href="{% url 'core:shop' %}">{% if object.items.count %}Seguir comprando{% else %}Empezar a comprar{% endif %}</a>
                         </div>
                     </div>
                     <!-- <div class="col-lg-6 col-md-6 col-sm-6">
@@ -89,20 +89,32 @@
                 </div>
             </div>
             <div class="col-lg-4">
-                <div class="cart__discount">
-                    <h6>Discount codes</h6>
-                    <form action="#">
-                        <input type="text" placeholder="Coupon code">
-                        <button type="submit">Apply</button>
-                    </form>
-                </div>
+                {% if object.items.count %}
+                    <div class="cart__discount">
+                        <h6>Cupón de descuento</h6>
+                        <form action="{% url 'core:add-coupon' %}" method="POST">
+                            {% csrf_token %}
+                            {{ couponForm.code }}
+                            <button type="submit">Aplicar</button>
+                        </form>                    
+                    </div>
+                {% endif %}
                 <div class="cart__total">
-                    <h6>Cart total</h6>
+                    <h6>A pagar</h6>
                     <ul>
-                        <li>Subtotal <span>$ {{ object.get_total }}</span></li>
-                        <li>Total <span>$ {{ object.get_total }}</span></li>
+                        {% if object.items.count %}
+                            <li>Sub Total <span>{{ object.get_sub_total | currency }}</span></li>
+                            {% if object.coupon %}
+                                <li class="text-success">
+                                    Promo {{ object.coupon.code }}<span class="text-success"> -{{ object.coupon.amount | currency }}</span>
+                                </li>
+                            {% endif %}                            
+                        {% endif %}
+                        <li>Total <span>{{ object.get_total | currency }}</span></li>
                     </ul>
-                    <a href="{% url 'core:checkout' %}" class="primary-btn">Proceed to checkout</a>
+                    {% if object.items.count %}
+                        <a href="{% url 'core:checkout' %}" class="primary-btn">Proceder con el pago</a>
+                    {% endif %}
                 </div>
             </div>
         </div>

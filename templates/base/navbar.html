@@ -33,7 +33,7 @@
             {% endif %}
         </a>
         {% if request.user.is_authenticated %}
-            <div class="price">${{ cart.total }}</div>
+            <div class="price">{{ cart.total | currency }}</div>
         {% endif %}
     </div>
     <div id="mobile-menu-wrap"></div>
@@ -106,7 +106,7 @@
                         {% endif %}
                     </a>
                     {% if request.user.is_authenticated %}
-                        <div class="price">${{ cart.total }}</div>
+                        <div class="price">{{ cart.total | currency }}</div>
                     {% endif %}
                 </div>
             </div>

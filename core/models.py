@@ -171,11 +171,16 @@ class Order(models.Model):
     def __str__(self):
         return self.user.username
 
-    def get_total(self):
-        total = 0
+    def get_sub_total(self):
+        sub_total = 0
         for order_item in self.items.all():
-            total += order_item.get_final_price()
-        if self.coupon:
+            sub_total += order_item.get_final_price()
+
+        return sub_total
+
+    def get_total(self):
+        total = self.get_sub_total()
+        if self.coupon and total > 0:
             total -= self.coupon.amount
         return total
 

@@ -221,12 +221,62 @@ class OrderSummaryView(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
         try:
             order = Order.objects.get(user=self.request.user, ordered=False)
-            context = {'object': order}
+            couponForm = CouponForm()
+            context = {'object': order, 'couponForm': couponForm}
             template_name = 'order_summary.html'
             return render(self.request, template_name, context)
         except ObjectDoesNotExist:
             messages.warning(self.request, "You don't have an active order.")
             return redirect("/")
+
+
+def get_coupon(request, code):
+    try:
+        coupon = Coupon.objects.get(code=code)
+        return coupon
+    # Cannot assign "<HttpResponseRedirect status_code=302, "text/html; charset=utf-8", url="/checkout/">": "Order.coupon" must be a "Coupon" instance.
+    except ObjectDoesNotExist:
+        return False
+
+class addCouponView(View):
+    def post(self, *args, **kwargs):
+        form = CouponForm(self.request.POST or None)
+        if form.is_valid():
+            try:
+                code = form.cleaned_data.get('code')
+                order = Order.objects.get(
+                    user=self.request.user, ordered=False)
+                coupon = get_coupon(self.request, code)
+                if coupon:
+                    order.coupon = coupon
+                    order.save()
+                else:
+                    messages.info(self.request, "This coupon does not exist")
+                    return redirect("core:order-summary")                    
+                messages.success(self.request, "Succesfully added coupon!")
+                return redirect("core:order-summary")
+
+            except Order.DoesNotExist:
+                messages.info(self.request, "You don't have an active order.")
+                return redirect("core:order-summary")
+
+# class addCouponView(View):
+#     def post(self, *args, **kwargs):
+#         form = CouponForm(self.request.POST or None)
+#         if form.is_valid():
+#             try:
+#                 code = form.cleaned_data.get('code')
+#                 order = Order.objects.get(
+#                     user=self.request.user, ordered=False)
+#                 coupon = get_coupon(self.request, code)
+#                 order.coupon = coupon
+#                 order.save()
+#                 messages.success(self.request, "Succesfully added coupon!")
+#                 return redirect("core:checkout")
+
+#             except ObjectDoesNotExist:
+#                 messages.info(self.request, "You don't have an active order.")
+#                 return redirect("core:checkout")                
 
 
 class ItemDetailView(DetailView):
@@ -536,33 +586,7 @@ def add_single_item_to_cart(request, slug):
         return redirect("core:order-summary")
 
 
-def get_coupon(request, code):
-    try:
-        coupon = Coupon.objects.get(code=code)
-        return coupon
-    # Cannot assign "<HttpResponseRedirect status_code=302, "text/html; charset=utf-8", url="/checkout/">": "Order.coupon" must be a "Coupon" instance.
-    except ObjectDoesNotExist:
-        messages.info(request, "This coupon does not exist")
-        return redirect("core:checkout")
 
-
-class addCouponView(View):
-    def post(self, *args, **kwargs):
-        form = CouponForm(self.request.POST or None)
-        if form.is_valid():
-            try:
-                code = form.cleaned_data.get('code')
-                order = Order.objects.get(
-                    user=self.request.user, ordered=False)
-                coupon = get_coupon(self.request, code)
-                order.coupon = coupon
-                order.save()
-                messages.success(self.request, "Succesfully added coupon!")
-                return redirect("core:checkout")
-
-            except ObjectDoesNotExist:
-                messages.info(self.request, "You don't have an active order.")
-                return redirect("core:checkout")
 
 
 class RequestRefundView(View):
