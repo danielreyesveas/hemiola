@@ -13,7 +13,7 @@
 		<div class="row">
 			<div class="col-lg-12">
 				<ul class="filter__controls">
-					<li class="active" data-filter="*">All</li>
+					<li class="active" data-filter="*">Todos</li>
 					{% for category in categories %}
 						<li data-filter=".{{category.category__slug}}">{{ category.category__name }}</li>
 					{% endfor %}
@@ -25,7 +25,11 @@
 			<div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix {{ item.category.slug }}">
 				<div class="product__item">
 					<div class="product__item__pic set-bg" data-href="{{ item.get_absolute_url }}" data-setbg="{{ item.image.url }}">
-						<span class="label">New</span>
+						{% if item.get_label %}
+							<span class="label-{{ item.get_label_class }}">
+								{{ item.get_label }}
+							</span>
+						{% endif %}
 						<!-- <ul class="product__hover">
 							<li><a href="#"><img src="{% static 'img/icon/heart.png' %}" alt=""></a></li>
 							<li><a href="{{ item.get_absolute_url }}"><img src="{% static 'img/icon/search.png' %}" alt=""></a></li>
@@ -33,7 +37,7 @@
 					</div>
 					<div class="product__item__text">
 						<h6>{{ item.title }}</h6>
-						<a href="{{ item.get_add_to_cart_url }}" class="add-cart">+ Add To Cart</a>
+						<a href="{{ item.get_add_to_cart_url }}" class="add-cart">+ Añadir al Carro</a>
 						<div class="rating">
 							<i class="fa fa-star-o"></i>
 							<i class="fa fa-star-o"></i>

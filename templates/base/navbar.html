@@ -38,7 +38,7 @@
     </div>
     <div id="mobile-menu-wrap"></div>
     <div class="offcanvas__text">
-        <p>Free shipping, 30-day return or refund guarantee.</p>
+        <p>Envíos gratis y garantía de devolución de hasta 30 días.</p>
     </div>
 </div>
 <!-- Offcanvas Menu End -->
@@ -50,7 +50,7 @@
             <div class="row">
                 <div class="col-lg-6 col-md-7">
                     <div class="header__top__left">
-                        <p>Free shipping, 30-day return or refund guarantee.</p>
+                        <p>Envíos gratis y garantía de devolución de hasta 30 días.</p>
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-5">
@@ -87,10 +87,10 @@
                 <nav class="header__menu mobile-menu">
                     <ul>
                         <li class="{% if request.path == '/' %}active{% endif %}"><a href="{% url 'core:home' %}">Home</a></li>
-                        <li class="{% if request.path == '/shop/' %}active{% endif %}"><a href="{% url 'core:shop' %}">Shop</a></li>
+                        <li class="{% if request.path == '/shop/' %}active{% endif %}"><a href="{% url 'core:shop' %}">Tienda</a></li>
                         <li class="{% if request.path == '/blog/' %}active{% endif %}"><a href="{% url 'blog:list' %}">Blog</a></li>
-                        <li class="{% if request.path == '/contact/' %}active{% endif %}"><a href="{% url 'core:contact' %}">Contact</a></li>
-                        <li class="{% if request.path == '/about/' %}active{% endif %}"><a href="{% url 'core:about' %}">About</a></li>
+                        <li class="{% if request.path == '/contact/' %}active{% endif %}"><a href="{% url 'core:contact' %}">Contacto</a></li>
+                        <li class="{% if request.path == '/about/' %}active{% endif %}"><a href="{% url 'core:about' %}">Nosotros</a></li>
                     </ul>
                 </nav>
             </div>

@@ -13,8 +13,8 @@
 				<div class="col-lg-12">
 					<div class="product__details__breadcrumb">
 						<a href="{% url 'core:home' %}">Home</a>
-						<a href="{% url 'core:shop' %}">Shop</a>
-						<span>Product Details</span>
+						<a href="{% url 'core:shop' %}">Tienda</a>
+						<span>{{ object.title }}</span>
 					</div>
 				</div>
 			</div>
@@ -88,10 +88,17 @@
 							<i class="fa fa-star"></i>
 							<i class="fa fa-star"></i>
 							<i class="fa fa-star-o"></i>
-							<span> - 5 Reviews</span>
+							<span> - 5 Reseñas</span>
 						</div>
 						
-						<h3>${{ object.discount_price }} <span>{{ object.price }}</span></h3>
+						<h3>
+							{% if object.discount_price %}
+								${{ object.discount_price }} 
+								<span>{{ object.price }}</span>
+							{% else %}
+								${{ object.price }} 
+							{% endif %}
+						</h3>
 
 						<div class="product__details__cart__option">
 							<div class="quantity">
@@ -99,7 +106,7 @@
 									<input type="text" value="1">
 								</div>
 							</div>
-							<a href="{{ object.get_add_to_cart_url }}" class="primary-btn">add to cart</a>
+							<a href="{{ object.get_add_to_cart_url }}" class="primary-btn">Agregar al Carro</a>
 						</div>
 						<!-- <div class="product__details__btns__option">
 							<a href="#"><i class="fa fa-heart"></i> add to wishlist</a>
@@ -122,55 +129,26 @@
 					<div class="product__details__tab">
 						<ul class="nav nav-tabs" role="tablist">
 							<li class="nav-item">
-								<a class="nav-link active" data-toggle="tab" href="#tabs-5"
-								role="tab">Description</a>
+								<a class="nav-link active" data-toggle="tab" href="#info" role="tab">
+									Descripción
+								</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" data-toggle="tab" href="#tabs-6" role="tab">Customer
-								Previews(5)</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" data-toggle="tab" href="#tabs-7" role="tab">Additional
-								information</a>
-							</li>
+								<a class="nav-link" data-toggle="tab" href="#reviews" role="tab">
+									Reseñas(5)
+								</a>
+							</li>							
 						</ul>
-						<div class="tab-content">
-							<div class="tab-pane active" id="tabs-5" role="tabpanel">
-								<div class="product__details__tab__content">
-									<p>{{ object.description | linebreaks }}</p>
-								</div>
-							</div>
-							<div class="tab-pane" id="tabs-6" role="tabpanel">
+						<div class="tab-content">		
+							<div class="tab-pane active" id="info" role="tabpanel">
 								<div class="product__details__tab__content">
 									<div class="product__details__tab__content__item">
-										<h5>Products Infomation</h5>
-										<p>A Pocket PC is a handheld computer, which features many of the same
-											capabilities as a modern PC. These handy little devices allow
-											individuals to retrieve and store e-mail messages, create a contact
-											file, coordinate appointments, surf the internet, exchange text messages
-											and more. Every product that is labeled as a Pocket PC must be
-											accompanied with specific software to operate the unit and must feature
-										a touchscreen and touchpad.</p>
-										<p>As is the case with any new technology product, the cost of a Pocket PC
-											was substantial during it’s early release. For approximately $700.00,
-											consumers could purchase one of top-of-the-line Pocket PCs in 2003.
-											These days, customers are finding that prices have become much more
-											reasonable now that the newness is wearing off. For approximately
-										$350.00, a new Pocket PC can now be purchased.</p>
-									</div>
-									<div class="product__details__tab__content__item">
-										<h5>Material used</h5>
-										<p>Polyester is deemed lower quality due to its none natural quality’s. Made
-											from synthetic materials, not natural like wool. Polyester suits become
-											creased easily and are known for not being breathable. Polyester suits
-											tend to have a shine to them compared to wool and cotton suits, this can
-											make the suit look cheap. The texture of velvet is luxurious and
-											breathable. Velvet is a great choice for dinner party jacket and can be
-										worn all year round.</p>
-									</div>
+										<h5>Infomación</h5>
+										<p>{{ object.description | linebreaks }}</p>
+									</div>								
 								</div>
 							</div>
-							<div class="tab-pane" id="tabs-7" role="tabpanel">
+							<div class="tab-pane" id="reviews" role="tabpanel">
 								<div class="product__details__tab__content">
 									<p class="note">Nam tempus turpis at metus scelerisque placerat nulla deumantos
 										solicitud felis. Pellentesque diam dolor, elementum etos lobortis des mollis
@@ -185,22 +163,6 @@
 											and more. Every product that is labeled as a Pocket PC must be
 											accompanied with specific software to operate the unit and must feature
 										a touchscreen and touchpad.</p>
-										<p>As is the case with any new technology product, the cost of a Pocket PC
-											was substantial during it’s early release. For approximately $700.00,
-											consumers could purchase one of top-of-the-line Pocket PCs in 2003.
-											These days, customers are finding that prices have become much more
-											reasonable now that the newness is wearing off. For approximately
-										$350.00, a new Pocket PC can now be purchased.</p>
-									</div>
-									<div class="product__details__tab__content__item">
-										<h5>Material used</h5>
-										<p>Polyester is deemed lower quality due to its none natural quality’s. Made
-											from synthetic materials, not natural like wool. Polyester suits become
-											creased easily and are known for not being breathable. Polyester suits
-											tend to have a shine to them compared to wool and cotton suits, this can
-											make the suit look cheap. The texture of velvet is luxurious and
-											breathable. Velvet is a great choice for dinner party jacket and can be
-										worn all year round.</p>
 									</div>
 								</div>
 							</div>
@@ -216,7 +178,7 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-12">
-				<h3 class="related-title">Related Products</h3>
+				<h3 class="related-title">Productos Relacionados</h3>
 			</div>
 		</div>
 		<div class="row">
@@ -225,11 +187,15 @@
 				<div class="col-lg-3 col-md-6 col-sm-6 col-sm-6">
 					<div class="product__item">
 						<div class="product__item__pic set-bg" data-href="{{ related_item.get_absolute_url }}" data-setbg="{{ related_item.image.url }}">
-							<span class="label">New</span>							
+							{% if related_item.get_label %}
+								<span class="label-{{ related_item.get_label_class }}">
+									{{ related_item.get_label }}
+								</span>
+							{% endif %}						
 						</div>
 						<div class="product__item__text">
 							<h6>{{ related_item.title }}</h6>
-							<a href="{{ related_item.get_add_to_cart_url }}" class="add-cart">+ Add To Cart</a>
+							<a href="{{ related_item.get_add_to_cart_url }}" class="add-cart">+ Agregar al Carro</a>
 							<div class="rating">
 								<i class="fa fa-star-o"></i>
 								<i class="fa fa-star-o"></i>

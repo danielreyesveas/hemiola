@@ -28,9 +28,8 @@ class HomeView(ListView):
     object_list  = []
 
     def get_context_data(self, *args, **kwargs):
-        context = super(HomeView, self).get_context_data(**kwargs)
-        context["posts"] = Post.objects.order_by('-created_at')[:3]
-        return context
+        self.context["posts"] = Post.objects.order_by('-created_at')[:3]
+        return self.context
     
     def get_queryset(self):
         self.context = super(HomeView, self).get_context_data()
@@ -52,7 +51,7 @@ class ShopView(ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(ShopView, self).get_context_data(**kwargs)
-        context['search'] = self.request.GET.get('search', None)
+        context['search'] = self.request.GET.get('search', "")
         context['category_slug'] = self.request.GET.get('category', None)
         context['brand_slug'] = self.request.GET.get('brand', None)
         context['tag_slug'] = self.request.GET.get('tag', None)

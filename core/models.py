@@ -4,6 +4,9 @@ from django.conf import settings
 from django.shortcuts import reverse
 from django_countries.fields import CountryField
 from taggit.managers import TaggableManager
+from django.utils import timezone
+
+
 
 LABEL_CHOICES = (
     ('P', 'primary'),
@@ -85,6 +88,23 @@ class Item(models.Model):
         return reverse("core:remove-from-cart", kwargs={
             'slug': self.slug
         })
+
+    def get_antiquity(self):
+        return int((timezone.now() - self.created_at).days)
+
+    def get_label(self):
+        if self.get_antiquity() < 30:
+            return "Nuevo"
+        elif self.discount_price:
+            return "Rebaja"
+        return None
+
+    def get_label_class(self):
+        if self.get_antiquity() < 30:
+            return "new"
+        elif self.discount_price:
+            return "sale"
+        return None
 
     def related_items(self):
         tags_ids = list(self.tags.values_list('pk', flat=True))
