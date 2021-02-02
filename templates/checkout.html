@@ -4,117 +4,133 @@
 {% block content %}
 
 
-  <section class="checkout spad">
+<section class="checkout spad">
     <div class="container">
         <div class="checkout__form">
-            <form action="#">
+            <form method="POST">
+                {% csrf_token %}
                 <div class="row">
                     <div class="col-lg-8 col-md-6">
-                        <h6 class="coupon__code"><span class="icon_tag_alt"></span> Have a coupon? <a href="#">Click
-                        here</a> to enter your code</h6>
 
-                        <h6 class="checkout__title">Billing Details</h6>
+                        <h6 class="checkout__title">Envío</h6>
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="checkout__input">
-                                    <p>Fist Name<span>*</span></p>
-                                    <input type="text">
+                                    <p>Nombre<span>*</span></p>
+                                    {{ form.shipping_first_name }}
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="checkout__input">
-                                    <p>Last Name<span>*</span></p>
-                                    <input type="text">
+                                    <p>Apellidos<span>*</span></p>
+                                    {{ form.shipping_last_name }}
                                 </div>
                             </div>
                         </div>
                         <div class="checkout__input">
-                            <p>Country<span>*</span></p>
-                            <input type="text">
+                            <p>País<span>*</span></p>
+                            {{ form.shipping_country }}                            
                         </div>
                         <div class="checkout__input">
-                            <p>Address<span>*</span></p>
-                            <input type="text" placeholder="Street Address" class="checkout__input__add">
-                            <input type="text" placeholder="Apartment, suite, unite ect (optinal)">
+                            <p>Dirección<span>*</span></p>
+                            {{ form.shipping_address }}
+                            {{ form.shipping_address2 }}
                         </div>
                         <div class="checkout__input">
-                            <p>Town/City<span>*</span></p>
-                            <input type="text">
+                            <p>Ciudad<span>*</span></p>
+                            {{ form.shipping_city }}
                         </div>
                         <div class="checkout__input">
-                            <p>Country/State<span>*</span></p>
-                            <input type="text">
-                        </div>
-                        <div class="checkout__input">
-                            <p>Postcode / ZIP<span>*</span></p>
-                            <input type="text">
+                            <p>Código Postal<span>*</span></p>
+                            {{ form.shipping_zip }}
                         </div>
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="checkout__input">
-                                    <p>Phone<span>*</span></p>
-                                    <input type="text">
+                                    <p>Teléfono<span>*</span></p>
+                                    {{ form.shipping_phone }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <h6 class="checkout__title">Facturación</h6>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="checkout__input">
+                                    <p>Nombre<span>*</span></p>
+                                    {{ form.billing_first_name }}
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="checkout__input">
-                                    <p>Email<span>*</span></p>
-                                    <input type="text">
+                                    <p>Apellidos<span>*</span></p>
+                                    {{ form.billing_last_name }}
                                 </div>
                             </div>
                         </div>
+                        <div class="checkout__input">
+                            <p>País<span>*</span></p>
+                            {{ form.billing_country }}                            
+                        </div>
+                        <div class="checkout__input">
+                            <p>Dirección<span>*</span></p>
+                            {{ form.billing_address }}
+                            {{ form.billing_address2 }}
+                        </div>
+                        <div class="checkout__input">
+                            <p>Ciudad<span>*</span></p>
+                            {{ form.billing_city }}
+                        </div>
+                        <div class="checkout__input">
+                            <p>Código Postal<span>*</span></p>
+                            {{ form.billing_zip }}
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="checkout__input">
+                                    <p>Teléfono<span>*</span></p>
+                                    {{ form.billing_phone }}
+                                </div>
+                            </div>
+                        </div>
+                        {% if not user.is_authenticated %}
                         <div class="checkout__input__checkbox">
                             <label for="acc">
-                                Create an account?
+                                ¿Crear una cuenta?
                                 <input type="checkbox" id="acc">
                                 <span class="checkmark"></span>
                             </label>
-                            <p>Create an account by entering the information below. If you are a returning customer
-                            please login at the top of the page</p>
+                            <p>Crea una cuenta para futuras compras o inicia sesión si ya tienes una.</p>
                         </div>
                         <div class="checkout__input">
-                            <p>Account Password<span>*</span></p>
+                            <p>Contraseña<span>*</span></p>
                             <input type="text">
-                        </div>
-                        <div class="checkout__input__checkbox">
-                            <label for="diff-acc">
-                                Note about your order, e.g, special noe for delivery
-                                <input type="checkbox" id="diff-acc">
-                                <span class="checkmark"></span>
-                            </label>
-                        </div>
-                        <div class="checkout__input">
-                            <p>Order notes<span>*</span></p>
-                            <input type="text"
-                            placeholder="Notes about your order, e.g. special notes for delivery.">
-                        </div>
+                        </div>                        
+                        {% endif %}
                     </div>
                     <div class="col-lg-4 col-md-6">
                         <div class="checkout__order">
-                            <h4 class="order__title">Your order</h4>
-                            <div class="checkout__order__products">Product <span>Total</span></div>
+                            <h4 class="order__title">Tu orden</h4>
+                            <div class="checkout__order__products">Producto <span>Total</span></div>
                             <ul class="checkout__total__products">
                                 {% for order_item in order.items.all %}
-                                  <li>{{ forloop.counter }}. {{ order_item.item.title }} <span>{{ order_item.item.price | currency }}</span></li>                               
+                                    <li>{{ forloop.counter }}. {{ order_item.item.title }} 
+                                        {% if order_item.item.discount_price %}
+                                            <span>{{ order_item.item.discount_price | currency }}</span>
+                                        {% else %}
+                                            <span>{{ order_item.item.price | currency }}</span>
+                                        {% endif %}
+                                    </li>                               
                                 {% endfor %}  
                             </ul>
                             <ul class="checkout__total__all">
-								<li>Subtotal <span>{{ order.get_sub_total | currency }}</span></li>
+								<li>Sub Total <span>{{ order.get_sub_total | currency }}</span></li>
 								{% if order.coupon %}
 									<li class="text-success">Promo <span class="text-success">-{{ order.coupon.amount | currency }}</span></li>
 								{% endif %}  
                                 <li>Total <span>{{ order.get_total | currency }}</span></li>
                             </ul>
-                            <div class="checkout__input__checkbox">
-                                <label for="acc-or">
-                                    Create an account?
-                                    <input type="checkbox" id="acc-or">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-                            <p>Lorem ipsum dolor sit amet, consectetur adip elit, sed do eiusmod tempor incididunt
-                            ut labore et dolore magna aliqua.</p>
-                            <div class="checkout__input__checkbox">
+                            <!-- <div class="checkout__input__checkbox">
                                 <label for="payment">
                                     Check Payment
                                     <input type="checkbox" id="payment">
@@ -127,8 +143,8 @@
                                     <input type="checkbox" id="paypal">
                                     <span class="checkmark"></span>
                                 </label>
-                            </div>
-                            <button type="submit" class="site-btn">PLACE ORDER</button>
+                            </div> -->
+                            <button type="submit" class="site-btn">PAGAR</button>
                         </div>
                     </div>
                 </div>

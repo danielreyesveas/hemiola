@@ -42,7 +42,11 @@
                                     </div>
                                     <div class="product__cart__item__text">
                                         <h6>{{ order_item.item.title }}</h6>
-                                        <h5>{{ order_item.item.price | currency }}</h5>
+                                        {% if order_item.item.discount_price %}
+                                            <h5>{{ order_item.item.discount_price | currency }}</h5>
+                                        {% else %}
+                                            <h5>{{ order_item.item.price | currency }}</h5>
+                                        {% endif %}
                                     </div>
                                 </td>
                                 <td class="quantity__item">
@@ -60,7 +64,7 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td class="cart__price">{{ order_item.get_total_item_price | currency }}</td>
+                                <td class="cart__price">{{ order_item.get_final_price | currency }}</td>
                                 <td class="cart__close">
                                     <a href="{% url 'core:remove-from-cart' order_item.item.slug %}">
                                         <i class="fa fa-close"></i>
@@ -89,7 +93,7 @@
                 </div>
             </div>
             <div class="col-lg-4">
-                {% if object.items.count %}
+                {% if object.items.count and not object.coupon %}
                     <div class="cart__discount">
                         <h6>Cupón de descuento</h6>
                         <form action="{% url 'core:add-coupon' %}" method="POST">

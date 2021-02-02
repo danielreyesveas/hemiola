@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Item, Brand, OrderItem, Order, Payment, Coupon, Carrousel, Category, Refund, Address, UserProfile
+from .models import Item, Brand, OrderItem, Order, Payment, Coupon, Carrousel, Category, Refund, Address, Customer
 
 
 def make_refund_accepted(modeladmin, request, queryset):
@@ -10,22 +10,21 @@ make_refund_accepted.short_description = 'Update orders to refund granted'
 
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ['user', 'ref_code', 'ordered', 'being_delivered',
+    list_display = ['customer', 'ref_code', 'ordered', 'being_delivered',
                     'received', 'refund_requested', 'refund_granted', 'billing_address', 'shipping_address', 'payment', 'coupon']
-    list_display_links = ['user', 'billing_address',
+    list_display_links = ['customer', 'billing_address',
                           'shipping_address', 'payment', 'coupon']
-    list_filter = ['user', 'ordered', 'being_delivered',
+    list_filter = ['customer', 'ordered', 'being_delivered',
                    'received', 'refund_requested', 'refund_granted']
-    search_fields = ['user__username', 'ref_code']
+    #search_fields = ['customer', 'ref_code']
     actions = [make_refund_accepted]
 
 
 class AddressAdmin(admin.ModelAdmin):
-    list_display = ['user', 'street_address', 'apartment_address',
+    list_display = ['customer', 'street_address', 'apartment_address',
                     'country', 'zip', 'address_type', 'default']
-    list_filter = ['user', 'address_type', 'default', 'country']
-    search_fields = ['user__username',
-                     'street_address', 'apartment_address', 'zip']
+    list_filter = ['customer', 'address_type', 'default', 'country']
+    #search_fields = ['customer', 'street_address', 'apartment_address', 'zip']
 
 
 class ItemAdmin(admin.ModelAdmin):
@@ -59,4 +58,4 @@ admin.site.register(Category, CategoryAdmin)
 admin.site.register(Brand, BrandAdmin)
 admin.site.register(Refund)
 admin.site.register(Address, AddressAdmin)
-admin.site.register(UserProfile)
+admin.site.register(Customer)

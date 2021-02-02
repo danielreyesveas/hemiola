@@ -1,8 +1,6 @@
 {% load static %}
 
-{% if user.is_authenticated %}
-    {% cart_item user as cart %}
-{% endif %}
+{% cart_item as cart %}
 
 <div class="offcanvas-menu-overlay"></div>
 <div class="offcanvas-menu-wrapper">
@@ -28,13 +26,9 @@
         <a href="" class="search-switch"><img src="{% static 'img/icon/search.png' %}" alt=""></a>
         <a href="#"><img src="{% static 'img/icon/heart.png' %}" alt=""></a>
         <a href="{% url 'core:order-summary' %}"><img src="{% static 'img/icon/cart.png' %}" alt=""> 
-            {% if user.is_authenticated %}
             <span>{{ cart.count }}</span>
-            {% endif %}
         </a>
-        {% if request.user.is_authenticated %}
-            <div class="price">{{ cart.total | currency }}</div>
-        {% endif %}
+        <div class="price">{{ cart.total | currency }}</div>
     </div>
     <div id="mobile-menu-wrap"></div>
     <div class="offcanvas__text">
@@ -101,13 +95,9 @@
                     </a>
                     <a href="#"><img src="{% static 'img/icon/heart.png' %}" alt=""></a>
                     <a href="{% url 'core:order-summary' %}"><img src="{% static 'img/icon/cart.png' %}" alt=""> 
-                        {% if user.is_authenticated %}
-                            <span>{{ cart.count }}</span>
-                        {% endif %}
+                        <span>{{ cart.count }}</span>
                     </a>
-                    {% if request.user.is_authenticated %}
-                        <div class="price">{{ cart.total | currency }}</div>
-                    {% endif %}
+                    <div class="price">{{ cart.total | currency }}</div>
                 </div>
             </div>
         </div>

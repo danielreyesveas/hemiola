@@ -1,14 +1,22 @@
 from django import template
-from core.models import Order
+from core.models import Order, Customer
 
 register = template.Library()
 
-@register.simple_tag
-def cart_item(user):
+@register.simple_tag(takes_context=True)
+def cart_item(context):
     cart = { 'count': 0, 'total': 0 }
-    if user.is_authenticated:
-        qs = Order.objects.filter(user=user, ordered=False)
-        if qs.exists():
-            cart['count'] = qs[0].items.count()             
-            cart['total'] = qs[0].get_total()             
+    request = context['request']
+
+    try:
+        customer = request.user.customer
+    except:
+        device = request.COOKIES["device"]
+        customer, created = Customer.objects.get_or_create(device=device)
+
+    order, created = Order.objects.get_or_create(customer=customer, ordered=False)
+
+    cart['count'] = order.items.count()             
+    cart['total'] = order.get_total()
+
     return cart
