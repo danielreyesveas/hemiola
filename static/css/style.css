@@ -1564,8 +1564,8 @@ ol {
 }
 
 .product__details__pic .nav-tabs .nav-item .nav-link .product__thumb__pic {
-	height: 120px;
-	width: 95px;
+	width: 75px;
+	height: 75px;
 	display: -webkit-box;
 	display: -ms-flexbox;
 	display: flex;

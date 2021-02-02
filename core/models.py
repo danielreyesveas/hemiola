@@ -35,6 +35,27 @@ class Customer(models.Model):
             name = self.device
         return str(name)
 
+def get_upload_path(instance, filename):
+    model = instance.album.model.__class__._meta
+    name = model.verbose_name_plural.replace(' ', '_')
+    return f'{name}/images/{filename}'
+    
+class ImageAlbum(models.Model):
+    def default(self):
+        return self.images.filter(default=True).first()
+    def thumbnails(self):
+        return self.images.filter(width__lt=100, length__lt=100)
+
+    def __str__(self):
+        return "Album"
+
+class Image(models.Model):
+    name = models.CharField(max_length=255)
+    image = models.ImageField(upload_to=get_upload_path)
+    default = models.BooleanField(default=False)
+    width = models.FloatField(default=100)
+    length = models.FloatField(default=100)
+    album = models.ForeignKey(ImageAlbum, related_name='images', on_delete=models.CASCADE)
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
@@ -72,6 +93,7 @@ class Item(models.Model):
     slug = models.SlugField(default='test-product')
     description = models.TextField(default="Description")
     image = models.ImageField(default="default.jpg")
+    album = models.OneToOneField(ImageAlbum, related_name='model', on_delete=models.CASCADE, null=True, blank=True)
     tags = TaggableManager(blank=True)
     active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)

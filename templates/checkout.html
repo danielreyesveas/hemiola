@@ -27,31 +27,39 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="checkout__input">
-                            <p>País<span>*</span></p>
-                            {{ form.shipping_country }}                            
-                        </div>
-                        <div class="checkout__input">
-                            <p>Dirección<span>*</span></p>
-                            {{ form.shipping_address }}
-                            {{ form.shipping_address2 }}
-                        </div>
-                        <div class="checkout__input">
-                            <p>Ciudad<span>*</span></p>
-                            {{ form.shipping_city }}
-                        </div>
-                        <div class="checkout__input">
-                            <p>Código Postal<span>*</span></p>
-                            {{ form.shipping_zip }}
-                        </div>
                         <div class="row">
-                            <div class="col-lg-6">
+                            <div class="col-lg-8">
+                                <div class="checkout__input">
+                                    <p>País<span>*</span></p>
+                                    {{ form.shipping_country }}                            
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
                                 <div class="checkout__input">
                                     <p>Teléfono<span>*</span></p>
                                     {{ form.shipping_phone }}
                                 </div>
                             </div>
+                        </div>                        
+                        <div class="checkout__input">
+                            <p>Dirección<span>*</span></p>
+                            {{ form.shipping_address }}
+                            {{ form.shipping_address2 }}
                         </div>
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <div class="checkout__input">
+                                    <p>Ciudad<span>*</span></p>
+                                    {{ form.shipping_city }}
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="checkout__input">
+                                    <p>Código Postal<span>*</span></p>
+                                    {{ form.shipping_zip }}
+                                </div>
+                            </div>
+                        </div>                        
 
                         <h6 class="checkout__title">Facturación</h6>
                         <div class="row">
@@ -68,31 +76,40 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="checkout__input">
-                            <p>País<span>*</span></p>
-                            {{ form.billing_country }}                            
-                        </div>
-                        <div class="checkout__input">
-                            <p>Dirección<span>*</span></p>
-                            {{ form.billing_address }}
-                            {{ form.billing_address2 }}
-                        </div>
-                        <div class="checkout__input">
-                            <p>Ciudad<span>*</span></p>
-                            {{ form.billing_city }}
-                        </div>
-                        <div class="checkout__input">
-                            <p>Código Postal<span>*</span></p>
-                            {{ form.billing_zip }}
-                        </div>
                         <div class="row">
-                            <div class="col-lg-6">
+                            <div class="col-lg-8">
+                                <div class="checkout__input">
+                                    <p>País<span>*</span></p>
+                                    {{ form.billing_country }}                            
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
                                 <div class="checkout__input">
                                     <p>Teléfono<span>*</span></p>
                                     {{ form.billing_phone }}
                                 </div>
                             </div>
                         </div>
+                        <div class="checkout__input">
+                            <p>Dirección<span>*</span></p>
+                            {{ form.billing_address }}
+                            {{ form.billing_address2 }}
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <div class="checkout__input">
+                                    <p>Ciudad<span>*</span></p>
+                                    {{ form.billing_city }}
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="checkout__input">
+                                    <p>Código Postal<span>*</span></p>
+                                    {{ form.billing_zip }}
+                                </div>
+                            </div>
+                        </div>
+                        
                         {% if not user.is_authenticated %}
                         <div class="checkout__input__checkbox">
                             <label for="acc">

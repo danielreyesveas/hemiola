@@ -38,10 +38,12 @@
                             <tr>
                                 <td class="product__cart__item">
                                     <div class="product__cart__item__pic">
-                                        <img src="{{ order_item.item.image.url }}" width="90" alt="">
+                                        <a href="{{ order_item.item.get_absolute_url }}">
+                                            <img src="{{ order_item.item.image.url }}" width="90" alt="">
+                                        </a>
                                     </div>
                                     <div class="product__cart__item__text">
-                                        <h6>{{ order_item.item.title }}</h6>
+                                        <a href="{{ order_item.item.get_absolute_url }}"><h6>{{ order_item.item.title }}</h6></a>
                                         {% if order_item.item.discount_price %}
                                             <h5>{{ order_item.item.discount_price | currency }}</h5>
                                         {% else %}
