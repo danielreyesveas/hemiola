@@ -11,7 +11,9 @@ def cart_item(context):
     try:
         customer = request.user.customer
     except:
-        device = request.COOKIES["device"]
+        device = request.COOKIES.get("device", False)
+        if not device:
+            return cart
         customer, created = Customer.objects.get_or_create(device=device)
 
     order, created = Order.objects.get_or_create(customer=customer, ordered=False)
