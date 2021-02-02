@@ -12,9 +12,9 @@ class CommentForm(forms.ModelForm):
             'content'
         ]
         widgets = {
-            'name': forms.TextInput(attrs={'placeholder': 'Name'},),
+            'name': forms.TextInput(attrs={'placeholder': 'Nombre'},),
             'email': forms.TextInput(attrs={'placeholder': 'Email'},),
-            'website': forms.TextInput(attrs={'placeholder': 'Website'},),
-            'content': forms.Textarea(attrs={'placeholder': 'Comment'},)
+            'website': forms.TextInput(attrs={'placeholder': 'Sitio web'},),
+            'content': forms.Textarea(attrs={'placeholder': 'Comentario'},)
         }
     

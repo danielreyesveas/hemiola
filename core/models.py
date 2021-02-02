@@ -5,8 +5,9 @@ from django.shortcuts import reverse
 from django_countries.fields import CountryField
 from taggit.managers import TaggableManager
 from django.utils import timezone
-
-
+from django.contrib.staticfiles.templatetags.staticfiles import static
+from django.utils.timezone import now
+from django.utils.text import slugify
 
 LABEL_CHOICES = (
     ('P', 'primary'),
@@ -29,8 +30,8 @@ class Customer(models.Model):
     device = models.CharField(max_length=200, null=True, blank=True)
 
     def __str__(self):
-        if self.name:
-            name = self.name
+        if self.user:
+            name = self.user
         else:
             name = self.device
         return str(name)
@@ -39,7 +40,7 @@ def get_upload_path(instance, filename):
     model = instance.album.model.__class__._meta
     name = model.verbose_name_plural.replace(' ', '_')
     return f'{name}/images/{filename}'
-    
+
 class ImageAlbum(models.Model):
     def default(self):
         return self.images.filter(default=True).first()
@@ -47,7 +48,11 @@ class ImageAlbum(models.Model):
         return self.images.filter(width__lt=100, length__lt=100)
 
     def __str__(self):
-        return "Album"
+        if hasattr(self, 'model'):
+            return f"{self.model}'s album"
+        else:
+            return f"Empty album #{self.id}"
+            
 
 class Image(models.Model):
     name = models.CharField(max_length=255)
@@ -56,6 +61,9 @@ class Image(models.Model):
     width = models.FloatField(default=100)
     length = models.FloatField(default=100)
     album = models.ForeignKey(ImageAlbum, related_name='images', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.name} from {self.album}"
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
@@ -90,7 +98,7 @@ class Item(models.Model):
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, blank=True, null=True, related_name='items')
     brand = models.ForeignKey(Brand, on_delete=models.SET_NULL, blank=True, null=True, related_name='items')
     label = models.CharField(choices=LABEL_CHOICES, max_length=1, default='P')
-    slug = models.SlugField(default='test-product')
+    slug = models.SlugField(max_length=50, blank=True, null=True)
     description = models.TextField(default="Description")
     image = models.ImageField(default="default.jpg")
     album = models.OneToOneField(ImageAlbum, related_name='model', on_delete=models.CASCADE, null=True, blank=True)
@@ -98,6 +106,11 @@ class Item(models.Model):
     active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug and self.title:
+            self.slug = slugify(self.title)
+        super(Item, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.title
@@ -144,6 +157,31 @@ class Item(models.Model):
 
         return items
 
+class Review(models.Model):
+    author = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True)
+    name = models.CharField(max_length=50, blank=True, null=True)
+    email = models.CharField(max_length=50, blank=True, null=True)
+    website = models.CharField(max_length=50, blank=True, null=True)
+    item = models.ForeignKey(Item, on_delete=models.CASCADE, related_name='reviews')
+    content = models.TextField()
+    stars = models.IntegerField(default=5)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    @property
+    def author_name(self):
+        return self.author or self.name
+
+    @property
+    def author_image(self):
+        image_url = static('img/default.png')
+        if self.author and self.author.user and self.author.user.profile:
+            image_url = self.author.user.profile.image.url
+        return image_url
+
+    def __str__(self):
+        return "Review by {}".format(self.author_name)
+
 
 class OrderItem(models.Model):
     customer = models.ForeignKey(Customer,
@@ -174,21 +212,16 @@ class OrderItem(models.Model):
 
 
 class Order(models.Model):
-    customer = models.ForeignKey(Customer,
-                             on_delete=models.CASCADE)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     ref_code = models.CharField(max_length=20, blank=True, null=True)
     items = models.ManyToManyField(OrderItem)
     start_date = models.DateTimeField(auto_now_add=True)
-    ordered_date = models.DateTimeField()
+    ordered_date = models.DateTimeField(default=now)
     ordered = models.BooleanField(default=False)
-    billing_address = models.ForeignKey(
-        'Address', related_name='billing_address', on_delete=models.SET_NULL, blank=True, null=True)
-    shipping_address = models.ForeignKey(
-        'Address', related_name='shipping_address', on_delete=models.SET_NULL, blank=True, null=True)
-    payment = models.ForeignKey(
-        'Payment', on_delete=models.SET_NULL, blank=True, null=True)
-    coupon = models.ForeignKey(
-        'Coupon', on_delete=models.SET_NULL, blank=True, null=True)
+    billing_address = models.ForeignKey('Address', related_name='billing_address', on_delete=models.SET_NULL, blank=True, null=True)
+    shipping_address = models.ForeignKey('Address', related_name='shipping_address', on_delete=models.SET_NULL, blank=True, null=True)
+    payment = models.ForeignKey('Payment', on_delete=models.SET_NULL, blank=True, null=True)
+    coupon = models.ForeignKey('Coupon', on_delete=models.SET_NULL, blank=True, null=True)
     being_delivered = models.BooleanField(default=False)
     received = models.BooleanField(default=False)
     refund_requested = models.BooleanField(default=False)
@@ -197,7 +230,7 @@ class Order(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.customer
+        return f"{self.customer}'s' order"
 
     def get_sub_total(self):
         sub_total = 0
@@ -230,7 +263,7 @@ class Address(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.customer
+        return f"{self.customer}'s' address"
 
     class Meta:
         verbose_name_plural = 'Addresses'
@@ -246,7 +279,7 @@ class Payment(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.customer
+        return f"{self.customer}'s' payment"
 
 
 class Coupon(models.Model):
@@ -288,5 +321,12 @@ def customer_receiver(sender, instance, created, *args, **kwargs):
     if created:
         customer = Customer.objects.create(user=instance)
 
+def image_album_receiver(sender, instance, created, *args, **kwargs):
+    if created:
+        imageAlbum = ImageAlbum.objects.create()
+        instance.album = imageAlbum
+        instance.save()
+
 
 post_save.connect(customer_receiver, sender=settings.AUTH_USER_MODEL)
+post_save.connect(image_album_receiver, sender=Item)

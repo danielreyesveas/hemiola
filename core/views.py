@@ -9,7 +9,9 @@ from django.shortcuts import redirect
 from django.utils import timezone
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
-from .forms import CheckoutForm, CouponForm, RefundForm, PaymentForm
+from .forms import CheckoutForm, CouponForm, RefundForm, PaymentForm, ReviewForm
+from django.http import HttpResponseRedirect
+
 import stripe
 import random
 import string
@@ -298,6 +300,33 @@ class addCouponView(View):
 class ItemDetailView(DetailView):
     model = Item
     template_name = 'product.html'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(ItemDetailView, self).get_context_data(**kwargs)
+        context['form'] = ReviewForm()       
+        return context
+
+    def post(self, *args, **kwargs):
+        form = ReviewForm(self.request.POST or None)
+        if form.is_valid():
+            review = form.save(commit=False)
+            self.object = self.get_object()
+            item = self.object
+            review.item = item
+
+            if self.request.user.is_authenticated:
+                customer, created = Customer.objects.get_or_create(user=self.request.user)
+                review.author = customer
+            else:
+                name = form.cleaned_data.get('name')
+                email = form.cleaned_data.get('email')
+                website = form.cleaned_data.get('website')
+                review.name = name
+                review.email = email
+                review.website = website
+                
+            review.save()
+            return HttpResponseRedirect(self.request.path_info)
 
 
 def is_valid_form(values):

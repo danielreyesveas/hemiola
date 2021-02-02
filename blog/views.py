@@ -47,7 +47,7 @@ class BlogDetailView(DetailView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(BlogDetailView, self).get_context_data(**kwargs)
-        context['form'] = CommentForm()        
+        context['form'] = CommentForm()       
         print(context)
         return context
 

@@ -39,10 +39,9 @@
 							{% for image in object.album.images.all %}
 								<div class="tab-pane{% if forloop.first %} active{% endif %}" id="image-{{ image.id }}" role="tabpanel">
 									<div class="product__details__pic__item">
-										<img src="{{ image.image.url }}" alt="">
-										<!-- <a href="https://www.youtube.com/watch?v=8PJ3_p7VqHw&list=RD8PJ3_p7VqHw&start_radio=1" class="video-popup"><i class="fa fa-play"></i></a> -->
+										<img src="{{ image.image.url }}" alt="">																				
 									</div>
-								</div>
+								</div>								
 							{% endfor %}
 						{% endif %}
 					</div>
@@ -57,12 +56,12 @@
 					<div class="product__details__text">
 						<h4>{{ object.title }}</h4>
 						<div class="rating">
+							<!-- <i class="fa fa-star"></i>
 							<i class="fa fa-star"></i>
 							<i class="fa fa-star"></i>
 							<i class="fa fa-star"></i>
-							<i class="fa fa-star"></i>
-							<i class="fa fa-star-o"></i>
-							<span> - 5 Reseñas</span>
+							<i class="fa fa-star-o"></i> -->
+							<span> {{ object.reviews.count }} Reseña{{ object.reviews.count | pluralize }}</span>
 						</div>
 						
 						<h3>
@@ -77,7 +76,9 @@
 						<div class="product__details__cart__option">
 							<div class="quantity">
 								<div class="pro-qty">
+									<span class="fa fa-angle-up inc qtybtn"></span>
 									<input type="text" value="1">
+									<span class="fa fa-angle-down dec qtybtn"></span>
 								</div>
 							</div>
 							<a href="{{ object.get_add_to_cart_url }}" class="primary-btn">Agregar al Carro</a>
@@ -109,7 +110,7 @@
 							</li>
 							<li class="nav-item">
 								<a class="nav-link" data-toggle="tab" href="#reviews" role="tab">
-									Reseñas(5)
+									Reseñas ({{ object.reviews.count }})
 								</a>
 							</li>							
 						</ul>
@@ -118,25 +119,58 @@
 								<div class="product__details__tab__content">
 									<div class="product__details__tab__content__item">
 										<h5>Infomación</h5>
-										<p>{{ object.description | linebreaks }}</p>
+										<p>{{ object.description | linebreaksbr }}</p>
 									</div>								
 								</div>
 							</div>
 							<div class="tab-pane" id="reviews" role="tabpanel">
 								<div class="product__details__tab__content">
-									<p class="note">Nam tempus turpis at metus scelerisque placerat nulla deumantos
-										solicitud felis. Pellentesque diam dolor, elementum etos lobortis des mollis
-										ut risus. Sedcus faucibus an sullamcorper mattis drostique des commodo
-									pharetras loremos.</p>
-									<div class="product__details__tab__content__item">
-										<h5>Products Infomation</h5>
-										<p>A Pocket PC is a handheld computer, which features many of the same
-											capabilities as a modern PC. These handy little devices allow
-											individuals to retrieve and store e-mail messages, create a contact
-											file, coordinate appointments, surf the internet, exchange text messages
-											and more. Every product that is labeled as a Pocket PC must be
-											accompanied with specific software to operate the unit and must feature
-										a touchscreen and touchpad.</p>
+									<div class="row d-flex justify-content-center">
+
+										<div class="col-lg-6">
+											<ul class="comment-list">
+												{% for review in object.reviews.all %}
+													<li class="comment">
+														<div class="blog__details__author__pic">
+															<img src="{{ review.author_image }}" alt="">
+														</div>
+														<div class="blog__details__author__text">
+															<h5>{{ review.author_name }}</h5>
+														</div>
+														<div class="comment-body">
+															<p>{{ review.content | linebreaks }}</p>
+															<div class="meta">{{ review.created_at }}</div>
+														</div>
+													</li>
+												{% endfor %}
+											</ul>
+										</div></div>
+										<div class="row d-flex justify-content-center">
+										<div class="col-lg-6 product__review">
+											<div class="blog__details__comment">
+												<h4>Escribir reseña</h4>
+												<form method="POST">
+													{% csrf_token %}
+													<div class="row">
+														{% if not user.is_authenticated %}
+															<div class="col-lg-4 col-md-4">
+																{{ form.name }}
+															</div>
+															<div class="col-lg-4 col-md-4">
+																{{ form.email }}
+															</div>
+															<div class="col-lg-4 col-md-4">
+																{{ form.website }}
+															</div>
+														{% endif %}
+														<div class="col-lg-12 text-center">
+															{{ form.content }}
+															<button type="submit" class="site-btn">Enviar</button>
+														</div>
+													</div>
+												</form>
+											</div>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -148,50 +182,52 @@
 	</div>
 </section>
 
-<section class="related spad">
-	<div class="container">
-		<div class="row">
-			<div class="col-lg-12">
-				<h3 class="related-title">Productos Relacionados</h3>
+{% if related_items.count %}
+	<section class="related spad">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<h3 class="related-title">Productos Relacionados</h3>
+				</div>
 			</div>
-		</div>
-		<div class="row">
+			<div class="row">
 
-			{% for related_item in related_items %}
-				<div class="col-lg-3 col-md-6 col-sm-6 col-sm-6">
-					<div class="product__item">
-						<div class="product__item__pic set-bg" data-href="{{ related_item.get_absolute_url }}" data-setbg="{{ related_item.image.url }}">
-							{% if related_item.get_label %}
-								<span class="label-{{ related_item.get_label_class }}">
-									{{ related_item.get_label }}
-								</span>
-							{% endif %}						
-						</div>
-						<div class="product__item__text">
-							<h6>{{ related_item.title }}</h6>
-							<a href="{{ related_item.get_add_to_cart_url }}" class="add-cart">+ Agregar al Carro</a>
-							<div class="rating">
-								<i class="fa fa-star-o"></i>
-								<i class="fa fa-star-o"></i>
-								<i class="fa fa-star-o"></i>
-								<i class="fa fa-star-o"></i>
-								<i class="fa fa-star-o"></i>
+				{% for related_item in related_items %}
+					<div class="col-lg-3 col-md-6 col-sm-6 col-sm-6">
+						<div class="product__item">
+							<div class="product__item__pic set-bg" data-href="{{ related_item.get_absolute_url }}" data-setbg="{{ related_item.image.url }}">
+								{% if related_item.get_label %}
+									<span class="label-{{ related_item.get_label_class }}">
+										{{ related_item.get_label }}
+									</span>
+								{% endif %}						
 							</div>
-							<h5>
-								{% if related_item.discount_price %}
-									{{ related_item.discount_price | currency }}
-								{% else %}
-									{{ related_item.price | currency }}
-								{% endif %}
-							</h5>						
+							<div class="product__item__text">
+								<h6>{{ related_item.title }}</h6>
+								<a href="{{ related_item.get_add_to_cart_url }}" class="add-cart">+ Agregar al Carro</a>
+								<!-- <div class="rating">
+									<i class="fa fa-star-o"></i>
+									<i class="fa fa-star-o"></i>
+									<i class="fa fa-star-o"></i>
+									<i class="fa fa-star-o"></i>
+									<i class="fa fa-star-o"></i>
+								</div> -->
+								<h5>
+									{% if related_item.discount_price %}
+										{{ related_item.discount_price | currency }}
+									{% else %}
+										{{ related_item.price | currency }}
+									{% endif %}
+								</h5>						
+							</div>
 						</div>
 					</div>
+				{% endfor %}
+				
 				</div>
-			{% endfor %}
-			
 			</div>
 		</div>
-	</div>
-</section>
+	</section>
+{% endif %}
 
 {% endblock content %}

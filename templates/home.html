@@ -38,13 +38,13 @@
 					<div class="product__item__text">
 						<h6>{{ item.title }}</h6>
 						<a href="{{ item.get_add_to_cart_url }}" class="add-cart">+ Añadir al Carro</a>
-						<div class="rating">
+						<!-- <div class="rating">
 							<i class="fa fa-star-o"></i>
 							<i class="fa fa-star-o"></i>
 							<i class="fa fa-star-o"></i>
 							<i class="fa fa-star-o"></i>
 							<i class="fa fa-star-o"></i>
-						</div>
+						</div> -->
 						<h5>
 							{% if item.discount_price %}
 								{{ item.discount_price | currency }}

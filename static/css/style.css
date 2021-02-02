@@ -73,6 +73,10 @@ h6 {
 	font-size: 16px;
 }
 
+section {
+	margin: 50px auto;
+}
+
 p {
 	font-size: 15px;
 	font-family: "Nunito Sans", sans-serif;
@@ -916,6 +920,10 @@ ol {
 	padding-bottom: 60px;
 }
 
+.product__review {
+	margin-top: 30px;
+}
+
 .filter__controls {
 	text-align: center;
 	margin-bottom: 45px;
@@ -1622,7 +1630,13 @@ ol {
 }
 
 .product__details__pic__item {
-	position: relative;
+	position: relative;	
+}
+.product__details__pic__item img {
+	width: auto;
+	max-width: 500px;
+	height: auto;
+	max-height: 700px;
 }
 
 .product__details__pic__item a {
@@ -1825,7 +1839,7 @@ ol {
 	font-weight: 600;
 }
 
-.product__details__cart__option .quantity .pro-qty .qtybtn.inc {
+.product__details__cart__option .quantity .pro-qty .qtybtn.dec {
 	top: 16px;
 }
 
@@ -3912,7 +3926,7 @@ ol {
 	}
 	.product__details__tab .nav-tabs .nav-item {
 		margin-bottom: 15px;
-	}
+	}	
 	.shopping__cart__table {
 		overflow-y: auto;
 	}

@@ -1,6 +1,7 @@
 from django import forms
 from django_countries.fields import CountryField
 from django_countries.widgets import CountrySelectWidget
+from .models import Review
 
 PAYMENT_CHOICES = (
     ('P', 'PayPal'),
@@ -72,3 +73,20 @@ class PaymentForm(forms.Form):
     stripeToken = forms.CharField(required=False)
     save = forms.BooleanField(required=False)
     use_default = forms.BooleanField(required=False)
+
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = [
+            'name',
+            'email',
+            'website',
+            'content'
+        ]
+        widgets = {
+            'name': forms.TextInput(attrs={'placeholder': 'Nombre'},),
+            'email': forms.TextInput(attrs={'placeholder': 'Email'},),
+            'website': forms.TextInput(attrs={'placeholder': 'Sitio web'},),
+            'content': forms.Textarea(attrs={'placeholder': 'Reseña'},)
+        }
+    
