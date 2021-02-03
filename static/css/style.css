@@ -1633,10 +1633,10 @@ ol {
 	position: relative;	
 }
 .product__details__pic__item img {
-	width: auto;
-	max-width: 500px;
+	width: 100%;
+	max-width: 474px;
 	height: auto;
-	max-height: 700px;
+	
 }
 
 .product__details__pic__item a {
