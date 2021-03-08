@@ -39,9 +39,9 @@
                     <h6>NewLetter</h6>
                     <div class="footer__newslatter">
                         <p>Be the first to know about new arrivals, look books, sales & promos!</p>
-                        <form action="#">
-                            <input type="text" placeholder="Your email">
-                            <button type="submit"><span class="icon_mail_alt"></span></button>
+                        <form novalidate>
+                            <input type="text" id="newsletter_email" name="newsletter_email" placeholder="Email">
+                            <button type="submit" id="newsletter_btn"><span class="icon_mail_alt"></span></button>
                         </form>
                     </div>
                 </div>
@@ -61,3 +61,58 @@
         </div>
     </div>
 </footer>
+
+
+{% block extra_scripts %}
+
+<script>
+    (function() {
+
+        const subscribe_newsletter_url = "{% url 'core:subscribe_newsletter' %}"
+        const newsletter_btn = document.getElementById("newsletter_btn");
+
+        newsletter_btn.addEventListener("click", function(event) {
+            event.preventDefault()
+
+            // TODO: spinner
+
+            const email_input = document.getElementById("newsletter_email")
+            const email = email_input.value
+
+            if(email === ""){
+                email_input.classList.add("input-error");
+            }else{
+                email_input.classList.remove("input-error");
+            }
+            
+            if(email){
+                fetch(subscribe_newsletter_url, {
+                    credentials: 'include',
+                    method: 'POST',
+                    headers: {
+                        "X-CSRFToken": getCookie("csrftoken"),
+                        "Accept": "application/json",
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        email
+                    })
+                }).then(
+                    response => response.json()
+                ).then(function(data) {
+                    if(data.success){
+                        console.log("OK")
+                        email_input.value = ""
+
+                        // TODO: success message
+                    }else{
+                        console.log("NOTOK")
+                        // TODO: success message
+                    }          
+                })      
+            }
+        })
+    })()
+</script>
+
+{% endblock extra_scripts %}

@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+import environ
+
+env = environ.Env()
+environ.Env.read_env()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -20,12 +24,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '#_9%417*h((zty!9zclb%m)#8h-giq0b_48(7satfyzxt8)+9_'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = (env('ENVIRONMENT') == 'development')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = env('ALLOWED_HOSTS').split(',')
 
 
 # Application definition
@@ -98,11 +102,11 @@ WSGI_APPLICATION = 'tienda_audio.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'tienda_audio',
-        'HOST': '107.6.142.229',
-        'USER': 'postgres',
-        'PASSWORD': 'daPV96G7N3b$',
-        'PORT': 5432
+        'NAME': env('DB_NAME'),
+        'USER': env('DB_USER'),
+        'PASSWORD': env('DB_PASSWORD'),
+        'HOST': env('DB_HOST'),
+        'PORT': env('DB_PORT'),
     }
 }
 
@@ -143,7 +147,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
-SESSION_COOKIE_AGE = 36000
+SESSION_COOKIE_AGE = 1209600
 
 
 STATIC_URL = '/static/'
@@ -168,3 +172,5 @@ SITE_ID = 1
 
 STRIPE_SECRET_KEY = 'sk_test_T2jhyiCUhTaI97whdt1aKmyD00HzQNziPJ'
 STRIPE_PUBLISHABLE_KEY = 'pk_test_QCkEZcJPHDIJOJJaxHTPv8Hc00OAAyE8vo'
+
+EMAIL_SENDER_URL = env('EMAIL_SENDER_URL')
