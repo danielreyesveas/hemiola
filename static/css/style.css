@@ -159,6 +159,10 @@ ol {
 	color: #fff;
 }
 
+.input-error {
+	border: 1px solid red !important;
+}
+
 /* buttons */
 
 .primary-btn {

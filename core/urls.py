@@ -1,5 +1,6 @@
 from django.urls import path
-from .views import HomeView, ShopView, CheckoutView, OrderSummaryView, ItemDetailView, about, contact, add_to_cart, add_single_item_to_cart, remove_from_cart, remove_single_item_from_cart, PaymentView, addCouponView, RequestRefundView
+from .views import HomeView, ShopView, CheckoutView, OrderSummaryView, ItemDetailView, about, contact,add_to_cart, add_single_item_to_cart, \
+     remove_from_cart, remove_single_item_from_cart, PaymentView, addCouponView, RequestRefundView, send_email
 
 app_name = 'core'
 
@@ -21,5 +22,6 @@ urlpatterns = [
     
 
      path('contact/', contact, name='contact'),
+     path('send-email/', send_email, name='send_email'),
      path('about/', about, name='about'),
 ]

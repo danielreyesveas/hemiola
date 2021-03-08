@@ -3,7 +3,7 @@
 {% block content %}
 
 <div class="map">
-    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d111551.9926412813!2d-90.27317134641879!3d38.606612219170856!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x54eab584e432360b%3A0x1c3bb99243deb742!2sUnited%20States!5e0!3m2!1sen!2sbd!4v1597926938024!5m2!1sen!2sbd" height="500" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+    <iframe src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=es&amp;q=Calle%20Lanuza%2032,%20M%C3%A1laga+(Hemiola)&amp;t=&amp;z=15&amp;ie=UTF8&amp;iwloc=B&amp;output=embed" height="500" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>    
 </div>
 
 <section class="contact spad">
@@ -12,36 +12,41 @@
             <div class="col-lg-6 col-md-6">
                 <div class="contact__text">
                     <div class="section-title">
-                        <span>Information</span>
-                        <h2>Contact Us</h2>
-                        <p>As you might expect of a company that began as a high-end interiors contractor, we pay
-                            strict attention.</p>
+                        <span>Contacto</span>
+                        <h2>Escríbenos</h2>
+                        <p>Si necesitas información sobre alguno de nuestros productos o tienes cualquier otra duda, contáctanos y te responderemos lo antes posible.</p>
                     </div>
                     <ul>
                         <li>
-                            <h4>America</h4>
-                            <p>195 E Parker Square Dr, Parker, CO 801 <br />+43 982-314-0958</p>
+                            <h4>España</h4>
+                            <p>Calle Lanuza 32, Málaga. <br />+34 678 159 962</p>
                         </li>
                         <li>
-                            <h4>France</h4>
-                            <p>109 Avenue Léon, 63 Clermont-Ferrand <br />+12 345-423-9893</p>
+                            <h4>Chile</h4>
+                            <p>Julio Covarrubias 10175, Santiago. <br />+569 9 887 01 47</p>
                         </li>
                     </ul>
                 </div>
             </div>
             <div class="col-lg-6 col-md-6">
                 <div class="contact__form">
-                    <form action="#">
+                    <form novalidate>
+                        
+                        {% csrf_token %}
+
                         <div class="row">
                             <div class="col-lg-6">
-                                <input type="text" placeholder="Name">
+                                <input type="text" name="name" id="name" placeholder="Nombre">
                             </div>
                             <div class="col-lg-6">
-                                <input type="text" placeholder="Email">
+                                <input type="text" name="email" id="email" placeholder="Email">
                             </div>
                             <div class="col-lg-12">
-                                <textarea placeholder="Message"></textarea>
-                                <button type="submit" class="site-btn">Send Message</button>
+                                <input type="text" name="subject" id="subject" placeholder="Asunto">
+                            </div>
+                            <div class="col-lg-12">
+                                <textarea name="content" id="content" placeholder="Mensaje"></textarea>
+                                <button type="submit" class="site-btn" id="send">Enviar</button>
                             </div>
                         </div>
                     </form>
@@ -52,3 +57,86 @@
 </section>
 
 {% endblock content %}
+
+{% block extra_scripts %}
+
+<script>
+	
+	(function() {
+
+    const send_email_url = "{% url 'core:send_email' %}"
+    const send_btn = document.getElementById("send");
+
+    send_btn.addEventListener("click", function(event) {
+      event.preventDefault()
+
+      // TODO: spinner
+			
+      const name_input = document.getElementById("name")
+      const name = name_input.value
+
+      const email_input = document.getElementById("email")
+      const email = email_input.value
+
+      const subject_input = document.getElementById("subject")
+      const subject = subject_input.value
+
+      const content_input = document.getElementById("content")
+      const content = content_input.value
+      
+      if(email === ""){
+        email_input.classList.add("input-error");
+      }else{
+        email_input.classList.remove("input-error");
+      }
+      if(subject === ""){
+        subject_input.classList.add("input-error");        
+      }else{
+        subject_input.classList.remove("input-error");
+      }
+      if(content === ""){
+        content_input.classList.add("input-error");
+      }else{
+        content_input.classList.remove("input-error");
+      }
+
+      if(email && subject && content){
+        fetch(send_email_url, {
+          credentials: 'include',
+          method: 'POST',
+          headers: {
+            "X-CSRFToken": getCookie("csrftoken"),
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            name, 
+            email,
+            subject,
+            content
+          })
+        }).then(
+          response => response.json()
+        ).then(function(data) {
+          if(data.success){
+            console.log("OK")
+            name_input.value = ""
+            email_input.value = ""
+            subject_input.value = ""
+            content_input.value = ""
+
+            // TODO: success message
+          }else{
+            console.log("NOTOK")
+            // TODO: success message
+          }          
+        })      
+      }
+
+		})
+
+  })()
+	
+</script>
+
+{% endblock extra_scripts %}

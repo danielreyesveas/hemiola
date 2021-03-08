@@ -1,21 +1,25 @@
 from django.conf import settings
 from django.shortcuts import render, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, DetailView, View
-from .models import Item, OrderItem, Order, Address, Payment, Coupon, Carrousel, Category, Refund, Customer
+from .models import Item, OrderItem, Order, Address, Payment, Coupon, Category, Refund, Customer
 from blog.models import Post
 from django.shortcuts import redirect
 from django.utils import timezone
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from .forms import CheckoutForm, CouponForm, RefundForm, PaymentForm, ReviewForm
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 
 import stripe
 import random
 import string
-from django.db.models import  Q
+from django.db.models import Q
+
+from .utils import api_response
+import requests
+import time
+import json
+from .constants import contact_template_slug, email_sender_url
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -725,6 +729,39 @@ class RequestRefundView(View):
 def contact(request):
     template_name = 'contact.html'
     return render(request, template_name)
+
+def send_email(request):
+    json_response = {'success': False}
+
+    data = json.loads(request.body.decode("utf-8"))
+
+    if('subject' not in data): 
+        json_response['msg'] = 'El campo \'subject\' no puede estar vacío' 
+        return api_response(json_response)
+    elif('email' not in data): 
+        json_response['msg'] = 'El campo \'email\' no puede estar vacío' 
+        return api_response(json_response)
+    elif('content' not in data): 
+        json_response['msg'] = 'El campo \'content\' no puede estar vacío' 
+        return api_response(json_response)
+
+    name = data['name']
+    email = data['email']
+    subject = data['subject']
+    content = data['content']
+
+    attempt_num = 0
+    while attempt_num < 1:       
+        body = {'name': name, 'from': email, 'subject': subject, 'content': content, 'template_slug': contact_template_slug}
+        response = requests.post(email_sender_url, data = json.dumps(body))
+        if response.status_code == 200:
+            data = response.json()
+            return JsonResponse(data)
+        else:
+            attempt_num += 1
+            time.sleep(5) 
+
+    return JsonResponse(json_response)
 
 def about(request):
     template_name = 'about.html'
