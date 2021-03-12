@@ -5,7 +5,7 @@ It implement the [Stripe](https://pypi.org/project/stripe/) library to proccess 
 
 <br />
 
-<div align="center"><img src="https://resources.reciclatusanimales.com/image/hemiola.png" width=700></div>
+<div align="center"><img src="https://resources.reciclatusanimales.com/image/hemiola-reciclatusanimales.png" width=700></div>
 
 <br />
 
