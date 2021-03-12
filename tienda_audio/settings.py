@@ -22,13 +22,9 @@ INSTALLED_APPS = [
     'django.contrib.sites',
 
     'django_countries',
-
     'crispy_forms',
-
     'taggit',
-
     'django_summernote',
-
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
