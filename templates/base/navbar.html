@@ -80,7 +80,7 @@
             <div class="col-lg-6 col-md-6">
                 <nav class="header__menu mobile-menu">
                     <ul>
-                        <li class="{% if request.path == '/' %}active{% endif %}"><a href="{% url 'core:home' %}">Home</a></li>
+                        <li class="{% if request.path == '/' %}active{% endif %}"><a href="{% url 'core:home' %}">Inicio</a></li>
                         <li class="{% if request.path == '/shop/' %}active{% endif %}"><a href="{% url 'core:shop' %}">Tienda</a></li>
                         <li class="{% if request.path == '/blog/' %}active{% endif %}"><a href="{% url 'blog:list' %}">Blog</a></li>
                         <li class="{% if request.path == '/contact/' %}active{% endif %}"><a href="{% url 'core:contact' %}">Contacto</a></li>

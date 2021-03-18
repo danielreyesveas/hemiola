@@ -1,5 +1,7 @@
 {% load static %}
 
+{% get_categories as all_categories %}
+
 <footer class="footer">
     <div class="container">
         <div class="row">
@@ -14,33 +16,32 @@
             </div>
             <div class="col-lg-2 offset-lg-1 col-md-3 col-sm-6">
                 <div class="footer__widget">
-                    <h6>Shopping</h6>
+                    <h6>Tienda</h6>
                     <ul>
-                        <li><a href="#">Clothing Store</a></li>
-                        <li><a href="#">Trending Shoes</a></li>
-                        <li><a href="#">Accessories</a></li>
-                        <li><a href="#">Sale</a></li>
+                        {% for category in all_categories %}
+                            <li data-filter=".{{category.slug}}"><a href="#">{{ category.name }}</a></li>
+                        {% endfor %}                       
                     </ul>
                 </div>
             </div>
             <div class="col-lg-2 col-md-3 col-sm-6">
                 <div class="footer__widget">
-                    <h6>Shopping</h6>
+                    <h6>Sitio</h6>
                     <ul>
-                        <li><a href="#">Contact Us</a></li>
-                        <li><a href="#">Payment Methods</a></li>
-                        <li><a href="#">Delivary</a></li>
-                        <li><a href="#">Return & Exchanges</a></li>
+                        <li class="{% if request.path == '/blog/' %}active{% endif %}"><a href="{% url 'blog:list' %}">Blog</a></li>
+                        <li class="{% if request.path == '/contact/' %}active{% endif %}"><a href="{% url 'core:contact' %}">Contacto</a></li>
+                        <li class="{% if request.path == '/about/' %}active{% endif %}"><a href="{% url 'core:about' %}">Nosotros</a></li>
+                        <li class="{% if request.path == '/shop/' %}active{% endif %}"><a href="{% url 'core:shop' %}">Tienda</a></li>
                     </ul>
                 </div>
             </div>
             <div class="col-lg-3 offset-lg-1 col-md-6 col-sm-6">
                 <div class="footer__widget">
-                    <h6>NewLetter</h6>
+                    <h6>Novedades</h6>
                     <div class="footer__newslatter">
-                        <p>Be the first to know about new arrivals, look books, sales & promos!</p>
+                        <p>¡Sé el primero en enterarte de nuestras novedades!</p>
                         <form novalidate>
-                            <input type="text" id="newsletter_email" name="newsletter_email" placeholder="Email">
+                            <input type="text" id="newsletter_email" name="newsletter_email" placeholder="Correo">
                             <button type="submit" id="newsletter_btn"><span class="icon_mail_alt"></span></button>
                         </form>
                     </div>
@@ -50,8 +51,7 @@
         <div class="row">
             <div class="col-lg-12 text-center">
                 <div class="footer__copyright__text">
-                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                    <p>Copyright ©
+                    <p>Hemiola ©
                         <script>
                             document.write(new Date().getFullYear());
                         </script>

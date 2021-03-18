@@ -2346,6 +2346,7 @@ ol {
 }
 
 .client__item {
+	cursor: pointer;
 	display: block;
 	margin-bottom: 75px;
 	text-align: center;

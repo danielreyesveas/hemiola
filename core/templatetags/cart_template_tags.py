@@ -1,5 +1,5 @@
 from django import template
-from core.models import Order, Customer
+from core.models import Category, Order, Customer
 
 register = template.Library()
 
@@ -22,3 +22,10 @@ def cart_item(context):
     cart['total'] = order.get_total()
 
     return cart
+
+@register.simple_tag
+def get_categories():
+    qs = Category.objects.filter(active=True).order_by('name')
+    if qs.exists():
+        return qs
+    return []

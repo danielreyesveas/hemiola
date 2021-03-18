@@ -116,7 +116,7 @@ class PaymentView(View):
             return render(self.request, "payment.html", context)
         else:
             messages.warning(
-                self.request, "You have not added a billing address")
+                self.request, "No has guardad una dirección de facturación.")
             return redirect("core:checkout")
 
     def post(self, *args, **kwargs):
@@ -186,7 +186,7 @@ class PaymentView(View):
                 order.ref_code = create_ref_code()
                 order.save()
 
-                messages.success(self.request, "Your order was successful!")
+                messages.success(self.request, "Tu orden fue ingresada correctamente.")
                 return redirect("/")
 
             except stripe.error.CardError as e:
@@ -197,39 +197,39 @@ class PaymentView(View):
 
             except stripe.error.RateLimitError as e:
                 # Too many requests made to the API too quickly
-                messages.warning(self.request, "Rate limit error")
+                messages.warning(self.request, "Hubo un problema con el rate.")
                 return redirect("/")
 
             except stripe.error.InvalidRequestError as e:
                 # Invalid parameters were supplied to Stripe's API
-                messages.warning(self.request, "Invalid parameters")
+                messages.warning(self.request, "Los parámentros no son correctos.")
                 return redirect("/")
 
             except stripe.error.AuthenticationError as e:
                 # Authentication with Stripe's API failed
                 # (maybe you changed API keys recently)
-                messages.warning(self.request, "Not authenticated")
+                messages.warning(self.request, "No estás autenticado.")
                 return redirect("/")
 
             except stripe.error.APIConnectionError as e:
                 # Network communication with Stripe failed
-                messages.warning(self.request, "Network error")
+                messages.warning(self.request, "Hubo un problema con la conexión.")
                 return redirect("/")
 
             except stripe.error.StripeError as e:
                 # Display a very generic error to the user, and maybe send
                 # yourself an email
                 messages.warning(
-                    self.request, "Something went wrong. You were not charged. Please try again.")
+                    self.request, "Algo salió mal, no se ha realizado el cobro, vuelve a intentarlo.")
                 return redirect("/")
 
             except Exception as e:
                 # send an email to ourselves
                 messages.warning(
-                    self.request, "A serious error occurred. We have been notifed.")
+                    self.request, "Se ha producido un error.")
                 return redirect("/")
 
-        messages.warning(self.request, "Invalid data received")
+        messages.warning(self.request, "La información no es válida.")
         return redirect("/payment/stripe/")
 
 
@@ -248,7 +248,7 @@ class OrderSummaryView(View):
             template_name = 'order_summary.html'
             return render(self.request, template_name, context)
         except ObjectDoesNotExist:
-            messages.warning(self.request, "You don't have an active order.")
+            messages.warning(self.request, "No tienes una orden activa.")
             return redirect("/")
 
 
@@ -273,13 +273,13 @@ class addCouponView(View):
                     order.coupon = coupon
                     order.save()
                 else:
-                    messages.info(self.request, "This coupon does not exist")
+                    messages.info(self.request, "El cupón no existe.")
                     return redirect("core:order-summary")                    
-                messages.success(self.request, "Succesfully added coupon!")
+                messages.success(self.request, "El cupón ha sido agregado.")
                 return redirect("core:order-summary")
 
             except Order.DoesNotExist:
-                messages.info(self.request, "You don't have an active order.")
+                messages.info(self.request, "No tienes una orden activa.")
                 return redirect("core:order-summary")
 
 # class addCouponView(View):
@@ -293,11 +293,11 @@ class addCouponView(View):
 #                 coupon = get_coupon(self.request, code)
 #                 order.coupon = coupon
 #                 order.save()
-#                 messages.success(self.request, "Succesfully added coupon!")
+#                 messages.success(self.request, "El cupón ha sido agregado.")
 #                 return redirect("core:checkout")
 
 #             except ObjectDoesNotExist:
-#                 messages.info(self.request, "You don't have an active order.")
+#                 messages.info(self.request, "No tienes una orden activa.")
 #                 return redirect("core:checkout")                
 
 
@@ -376,7 +376,7 @@ class CheckoutView(View):
 
             return render(self.request, 'checkout.html', context)
         except ObjectDoesNotExist:
-            messages.info(self.request, "You don't have an active order.")
+            messages.info(self.request, "No tienes una orden activa")
             return redirect("core:checkout")
 
     def post(self, *args, **kwargs):
@@ -410,7 +410,7 @@ class CheckoutView(View):
                         order.save()
                     else:
                         messages.info(
-                            self.request, "No default shipping address available")
+                            self.request, "No tienes una dirección de envío guardada.")
                         return redirect('core:checkout')
                 else:
                     print("User is entering a new shipping address")
@@ -451,7 +451,7 @@ class CheckoutView(View):
                             shipping_address.save()
                     else:
                         messages.info(
-                            self.request, "Please fill in the required shipping address fields")
+                            self.request, "Por favor, completa todos los campos requridos.")
                         return redirect('core:checkout')
 
                 use_default_billing = form.cleaned_data.get(
@@ -481,7 +481,7 @@ class CheckoutView(View):
                         order.save()
                     else:
                         messages.info(
-                            self.request, "No default billing address available")
+                            self.request, "No tienes una dirección de facturación guardada.")
                         return redirect('core:checkout')
                 else:
                     print("User is entering a new billing address")
@@ -522,7 +522,7 @@ class CheckoutView(View):
                             billing_address.save()
                     else:
                         messages.info(
-                            self.request, "Please fill in the required billing address fields")
+                            self.request, "Por favor, completa todos los campos requridos.")
                         return redirect('core:checkout')
 
                 # payment_option = form.cleaned_data.get('payment_option')
@@ -534,14 +534,14 @@ class CheckoutView(View):
                     return redirect('core:payment', payment_option='paypal')
                 else:
                     messages.warning(
-                        self.request, "Invalid payment option selected")
+                        self.request, "Método de pago no válido.")
                     return redirect('core:checkout')
 
         except ObjectDoesNotExist:
-            messages.warning(self.request, "You don't have an active order.")
+            messages.warning(self.request, "No tienes una orden activa.")
             return redirect("core:order-summary")
         print(form.errors)
-        messages.warning(self.request, "Failed Checkout.")
+        messages.warning(self.request, "Checkout fallido.")
         return redirect('core:checkout')
 
 
@@ -569,18 +569,18 @@ def add_to_cart(request, slug):
         if order.items.filter(item__slug=item.slug).exists():
             order_item.quantity += 1
             order_item.save()
-            messages.info(request, "This item quantity was updated.")
+            messages.info(request, "El carro fue actualizado.")
             return redirect("core:product", slug=slug)
         else:
             order.items.add(order_item)
-            messages.info(request, "This item was added to your cart.")
+            messages.info(request, "El producto fue agregado al carro.")
             return redirect("core:product", slug=slug)
     else:
         ordered_date = timezone.now()
         order = Order.objects.create(
             customer=customer, ordered_date=ordered_date)
         order.items.add(order_item)
-        messages.info(request, "This item was added to your cart.")
+        messages.info(request, "El producto fue agregado al carro.")
         return redirect("core:product", slug=slug)
 
 
@@ -607,13 +607,13 @@ def remove_from_cart(request, slug):
                 ordered=False
             )[0]
             order.items.remove(order_item)
-            messages.info(request, "This item was removed from your cart.")
+            messages.info(request, "El producto fue removido del carro.")
             return redirect("core:order-summary")
         else:
-            messages.info(request, "This item was not in your cart.")
+            messages.info(request, "Este producto no está en el carro.")
             return redirect("core:product", slug=slug)
     else:
-        messages.info(request, "You don't have an active order.")
+        messages.info(request, "No tienes una orden activa.")
         return redirect("core:product", slug=slug)
 
 
@@ -643,13 +643,13 @@ def remove_single_item_from_cart(request, slug):
                 order_item.save()
             else:
                 order.items.remove(order_item)
-            messages.info(request, "This item quantity was updated.")
+            messages.info(request, "El carro fue actualizado.")
             return redirect("core:order-summary")
         else:
-            messages.info(request, "This item was not in your cart.")
+            messages.info(request, "Este producto no está en el carro.")
             return redirect("core:product", slug=slug)
     else:
-        messages.info(request, "You don't have an active order.")
+        messages.info(request, "No tienes una orden activa.")
         return redirect("core:product", slug=slug)
 
 
@@ -676,18 +676,18 @@ def add_single_item_to_cart(request, slug):
         if order.items.filter(item__slug=item.slug).exists():
             order_item.quantity += 1
             order_item.save()
-            messages.info(request, "This item quantity was updated.")
+            messages.info(request, "El carro fue actualizado.")
             return redirect("core:order-summary")
         else:
             order.items.add(order_item)
-            messages.info(request, "This item was added to your cart.")
+            messages.info(request, "El producto fue agregado al carro.")
             return redirect("core:order-summary")
     else:
         ordered_date = timezone.now()
         order = Order.objects.create(
             customer=customer, ordered_date=ordered_date)
         order.items.add(order_item)
-        messages.info(request, "This item was added to your cart.")
+        messages.info(request, "El producto fue agregado al carro.")
         return redirect("core:order-summary")
 
 
@@ -719,11 +719,11 @@ class RequestRefundView(View):
                 refund.email = email
                 refund.save()
 
-                messages.success(self.request, "Your request was received.")
+                messages.success(self.request, "Tu petición fue recibida.")
                 return redirect("core:request-refund")
 
             except ObjectDoesNotExist:
-                messages.info(self.request, "This order does not exist.")
+                messages.info(self.request, "La orden no existe.")
                 return redirect("core:request-refund")
 
 def contact(request):
