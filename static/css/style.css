@@ -2037,6 +2037,15 @@ ol {
 	font-size: 15px;
 }
 
+.newsletter-message {
+	display: none;
+	color: #ffffff;
+	font-size: 16px;
+	font-weight: 700;
+	text-transform: uppercase;  
+	margin-bottom: 10px;
+}
+
 .footer__widget .footer__newslatter p {
 	color: #b7b7b7;
 }
@@ -3449,6 +3458,16 @@ ol {
   Contact
 -----------------------*/
 
+.contact-message {
+	visibility: hidden;
+	color: #32D190;
+	margin-bottom: 20px;
+	font-size: 14px;
+	text-align: right;
+	font-weight: 700;
+	text-transform: uppercase;  
+  }
+
 .contact__text .section-title {
 	text-align: left;
 	margin-bottom: 40px;
@@ -3550,6 +3569,7 @@ ol {
 .contact__form button {
 	letter-spacing: 4px;
 	padding: 14px 35px;
+	float: right;
 }
 
 /*--------------------------------- Responsive Media Quaries -----------------------------*/

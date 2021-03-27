@@ -46,6 +46,7 @@
                             </div>
                             <div class="col-lg-12">
                                 <textarea name="content" id="content" placeholder="Mensaje"></textarea>
+                                <div class="contact-message" id="message">🎹 Tu mensaje ha sido enviado, muy pronto te responderemos.</div>
                                 <button type="submit" class="site-btn" id="send">Enviar</button>
                             </div>
                         </div>
@@ -69,6 +70,7 @@
 
     send_btn.addEventListener("click", function(event) {
       event.preventDefault()
+      document.getElementById("message").style.visibility = "hidden";
 
       // TODO: spinner
 			
@@ -125,7 +127,7 @@
             subject_input.value = ""
             content_input.value = ""
 
-            // TODO: success message
+            document.getElementById("message").style.visibility = "visible";
           }else{
             console.log("NOTOK")
             // TODO: success message

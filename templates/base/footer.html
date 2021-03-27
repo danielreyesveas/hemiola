@@ -41,6 +41,7 @@
                     <div class="footer__newslatter">
                         <p>¡Sé el primero en enterarte de nuestras novedades!</p>
                         <form novalidate>
+                            <div class="newsletter-message" id="newsletter-message">🎹 Gracias por suscribirte.</div>
                             <input type="text" id="newsletter_email" name="newsletter_email" placeholder="Correo">
                             <button type="submit" id="newsletter_btn"><span class="icon_mail_alt"></span></button>
                         </form>
@@ -104,7 +105,9 @@
                         console.log("OK")
                         email_input.value = ""
 
-                        // TODO: success message
+                        document.getElementById("newsletter_email").style.display = "none";
+                        document.getElementById("newsletter_btn").style.display = "none";
+                        document.getElementById("newsletter-message").style.display = "block";
                     }else{
                         console.log("NOTOK")
                         // TODO: success message
