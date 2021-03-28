@@ -5,6 +5,7 @@ from django.shortcuts import reverse
 from django_countries.fields import CountryField
 from taggit.managers import TaggableManager
 from django.utils import timezone
+import PIL.Image
 from django.contrib.staticfiles.templatetags.staticfiles import static
 from django.utils.timezone import now
 from django.utils.text import slugify
@@ -110,7 +111,16 @@ class Item(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug and self.title:
             self.slug = slugify(self.title)
+        
+        super().save(*args, **kwargs)
+        img = PIL.Image.open(self.image.path)
+        if img.height > 300 or img.width > 300:
+            output_size = (300, 300)
+            img.thumbnail(output_size)
+            img.save(self.image.path)
         super(Item, self).save(*args, **kwargs)
+
+        
 
     def __str__(self):
         return self.title

@@ -199,6 +199,32 @@ ol {
 	background: #000;
 }
 
+.spinner-btn{
+	width: 146px;
+}
+
+.btn-spinner {
+	display: none;
+	width: 1.5rem;
+	height: 1.5rem;
+	border-top-color: #ffffff;
+	border-left-color: #ffffff;
+	animation: spinner 400ms linear infinite;
+	border-bottom-color: transparent;
+	border-right-color: transparent;
+	border-style: solid;
+	border-width: 3px;
+	border-radius: 50%;  
+	box-sizing: border-box;	
+	vertical-align: middle;
+	z-index: 100;
+}
+  
+@keyframes spinner {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+}
+
 .loader {
 	width: 40px;
 	height: 40px;
@@ -3459,14 +3485,22 @@ ol {
 -----------------------*/
 
 .contact-message {
-	visibility: hidden;
-	color: #32D190;
-	margin-bottom: 20px;
+	visibility: hidden;	
 	font-size: 14px;
 	text-align: right;
+	margin-bottom: 20px;
 	font-weight: 700;
 	text-transform: uppercase;  
-  }
+}
+
+.error-message {
+	color: red;
+}
+
+.success-message {
+	color: #32D190;
+	display: none;
+}
 
 .contact__text .section-title {
 	text-align: left;
