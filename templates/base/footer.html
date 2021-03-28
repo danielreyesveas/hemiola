@@ -40,12 +40,16 @@
                     <h6>Novedades</h6>
                     <div class="footer__newslatter">
                         <p>¡Sé el primero en enterarte de nuestras novedades!</p>
-                        <form novalidate>
-                            <div class="newsletter-message" id="newsletter-message">🎹 Gracias por suscribirte.</div>
+                        <div class="newsletter-message" id="newsletter-message">                            
+                            <span id="newsletter-success-message" class="newsletter-success-message">🎹 Gracias por suscribirte.</span>
+                            <span id="newsletter-error-message" class="newsletter-error-message">🔥 Se produjo un error, vuelve a intentarlo por favor.</span> 
+                        </div>
+                        <span class="newsletter-spinner" id="newsletter-spinner"></span>
+                        <form novalidate id="newsletter-form">
                             <input type="text" id="newsletter_email" name="newsletter_email" placeholder="Correo">
                             <button type="submit" id="newsletter_btn"><span class="icon_mail_alt"></span></button>
                         </form>
-                    </div>
+                    </div>                    
                 </div>
             </div>
         </div>
@@ -73,10 +77,11 @@
         const newsletter_btn = document.getElementById("newsletter_btn");
 
         newsletter_btn.addEventListener("click", function(event) {
-            event.preventDefault()
-
-            // TODO: spinner
-
+            event.preventDefault()            
+            document.getElementById("newsletter-message").style.visibility = "hidden";
+            document.getElementById("newsletter-error-message").style.display = "none";
+            document.getElementById("newsletter-success-message").style.display = "none";
+            document.getElementById("newsletter-spinner").style.display = "none";
             const email_input = document.getElementById("newsletter_email")
             const email = email_input.value
 
@@ -87,6 +92,9 @@
             }
             
             if(email){
+                document.getElementById("newsletter-spinner").style.display = "inline-block";
+                document.getElementById("newsletter-form").style.display = "none";
+                
                 fetch(subscribe_newsletter_url, {
                     credentials: 'include',
                     method: 'POST',
@@ -105,13 +113,14 @@
                         console.log("OK")
                         email_input.value = ""
 
-                        document.getElementById("newsletter_email").style.display = "none";
-                        document.getElementById("newsletter_btn").style.display = "none";
-                        document.getElementById("newsletter-message").style.display = "block";
+                        document.getElementById("newsletter-error-message").style.display = "none";
+                        document.getElementById("newsletter-success-message").style.display = "block";                        
                     }else{
-                        console.log("NOTOK")
-                        // TODO: success message
+                        document.getElementById("newsletter-error-message").style.display = "block";
+                        document.getElementById("newsletter-success-message").style.display = "none";                        
                     }          
+                    document.getElementById("newsletter-spinner").style.display = "none";
+                    document.getElementById("newsletter-message").style.visibility = "visible";
                 })      
             }
         })

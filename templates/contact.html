@@ -78,6 +78,7 @@
       event.preventDefault()
       document.getElementById("message").style.visibility = "hidden";
       document.getElementById("error-message").style.display = "none";
+      document.getElementById("success-message").style.display = "none";
       document.getElementById("btn-spinner").style.display = "none";
 
       // TODO: spinner
@@ -110,8 +111,7 @@
         content_input.classList.remove("input-error");
       }
 
-      if(email && subject && content){
-        document.getElementById("btn-spinner").style.display = "inline-block";
+      if(email && subject && content){      
         document.getElementById("btn-text").style.display = "none";
         document.getElementById("send").style.pointerEvents = "none";
         fetch(send_email_url, {
@@ -137,13 +137,13 @@
             subject_input.value = ""
             content_input.value = ""
 
-            document.getElementById("message").style.visibility = "visible";
+            document.getElementById("error-message").style.display = "none";
             document.getElementById("success-message").style.display = "block";
           }else{
-            document.getElementById("error-message").style.visibility = "visible";
+            document.getElementById("error-message").style.display = "block";
             document.getElementById("success-message").style.display = "none";            
           } 
-          document.getElementById("error-message").style.display = "block";
+          document.getElementById("message").style.visibility = "visible";          
           document.getElementById("btn-spinner").style.display = "none";
           document.getElementById("btn-text").style.display = "block"; 
           document.getElementById("send").style.pointerEvents = "auto";        

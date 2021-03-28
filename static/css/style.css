@@ -203,6 +203,30 @@ ol {
 	width: 146px;
 }
 
+.newsletter-spinner {
+	display: none;
+	position: relative;  
+  	left: 50%; 
+	width: 1.5rem;
+	height: 1.5rem;
+	margin-top: 20px;
+	border-top-color: #ffffff;
+	border-left-color: #ffffff;
+	animation: spinner 400ms linear infinite;
+	border-bottom-color: transparent;
+	border-right-color: transparent;
+	border-style: solid;
+	border-width: 3px;
+	border-radius: 50%;  
+	box-sizing: border-box;	
+	text-align: center;
+	z-index: 100;
+}
+
+.newsletter-error-message, .newsletter-success-message {
+	display: none;
+}
+
 .btn-spinner {
 	display: none;
 	width: 1.5rem;
@@ -2064,9 +2088,10 @@ ol {
 }
 
 .newsletter-message {
-	display: none;
+	visibility: hidden;
+	margin-top: 20px;
 	color: #ffffff;
-	font-size: 16px;
+	font-size: 14px;
 	font-weight: 700;
 	text-transform: uppercase;  
 	margin-bottom: 10px;
