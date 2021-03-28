@@ -80,8 +80,6 @@
       document.getElementById("error-message").style.display = "none";
       document.getElementById("success-message").style.display = "none";
       document.getElementById("btn-spinner").style.display = "none";
-
-      // TODO: spinner
 			
       const name_input = document.getElementById("name")
       const name = name_input.value
@@ -112,6 +110,7 @@
       }
 
       if(email && subject && content){      
+        document.getElementById("btn-spinner").style.display = "inline-block";
         document.getElementById("btn-text").style.display = "none";
         document.getElementById("send").style.pointerEvents = "none";
         fetch(send_email_url, {
