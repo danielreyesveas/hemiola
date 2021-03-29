@@ -462,7 +462,8 @@ ol {
 }
 
 .header__logo {
-	padding: 30px 0;
+	padding: 20px 0;
+	width: 180px;
 }
 
 .header__logo a {
@@ -2053,6 +2054,9 @@ ol {
 
 .footer__about .footer__logo {
 	margin-bottom: 30px;
+}
+.footer__logo {
+	width: 180px;
 }
 
 .footer__about .footer__logo a {
