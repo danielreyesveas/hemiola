@@ -9,6 +9,7 @@ import PIL.Image
 from django.contrib.staticfiles.templatetags.staticfiles import static
 from django.utils.timezone import now
 from django.utils.text import slugify
+import os
 
 LABEL_CHOICES = (
     ('P', 'primary'),
@@ -110,17 +111,8 @@ class Item(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug and self.title:
-            self.slug = slugify(self.title)
-        
-        super().save(*args, **kwargs)
-        img = PIL.Image.open(self.image.path)
-        if img.height > 300 or img.width > 300:
-            output_size = (300, 300)
-            img.thumbnail(output_size)
-            img.save(self.image.path)
-        super(Item, self).save(*args, **kwargs)
-
-        
+            self.slug = slugify(self.title)      
+        super(Item, self).save(*args, **kwargs)                  
 
     def __str__(self):
         return self.title
@@ -335,7 +327,30 @@ def image_album_receiver(sender, instance, created, *args, **kwargs):
     if created:
         imageAlbum = ImageAlbum.objects.create()
         instance.album = imageAlbum
-        instance.save()
+        instance.save()    
+        
+    if not instance.album.images.count() and instance.image: 
+        img = PIL.Image.open(instance.image.path)
+        model = instance.album.model.__class__._meta
+        name = model.verbose_name_plural.replace(' ', '_')
+        width, height = img.size
+        extension = img.format
+        path = f'{name}/images/{instance.title}_image_1.{extension}'
+        img.save(os.path.join(settings.MEDIA_ROOT,path))         
+        image = Image.objects.create(
+            album=instance.album,
+            name="image_1",
+            image=path,
+            default=True,
+            width=width,
+            length=height
+        )
+        instance.album.image = image
+        instance.album.save()        
+        if img.height > 300 or img.width > 300:
+            output_size = (300, 300)
+            img.thumbnail(output_size)
+            img.save(instance.image.path)
 
 
 post_save.connect(customer_receiver, sender=settings.AUTH_USER_MODEL)
